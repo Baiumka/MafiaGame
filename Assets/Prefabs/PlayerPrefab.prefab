@@ -1026,6 +1026,7 @@ MonoBehaviour:
   numberText: {fileID: 1471812414592974588}
   nicknameText: {fileID: 8834371212098245489}
   nicknameButton: {fileID: 4684729593842991305}
+  roleButton: {fileID: 7637701525375012163}
 --- !u!1 &4373915388949939303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,7 +1415,7 @@ GameObject:
   - component: {fileID: 2441338496741316466}
   - component: {fileID: 7468244665835361007}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: RoleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

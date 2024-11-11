@@ -24,7 +24,7 @@ public class StartWindow : MonoBehaviour
 
     private void onStartClick()
     {
-        Controller.singlton.StartNewGame(10);
+        Controller.singlton.CreateGame(10);
     }
 
 }

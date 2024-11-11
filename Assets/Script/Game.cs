@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Game
 {
     private List<Player> players;
     
+    public int Citizens { get => players.Count(player => player.Role == Role.CITIZEN || player.Role == Role.SHERIFF); }
+    public int Mafia { get => players.Count(player => player.Role == Role.MAFIA || player.Role == Role.BOSS); }
+
     public Game(int playerCount)
     {
         players = new List<Player>(playerCount);
@@ -29,4 +33,15 @@ public class Game
             }
         }
     }
+
+    public bool CheckPlayer()
+    {
+        foreach(Player p in players)
+        {
+            if (p.Role == Role.NONE) return false;
+            if (p.People == null) return false;
+        }
+        if (Mafia >= Citizens) return false;
+        return true;
+    }  
 }

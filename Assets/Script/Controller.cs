@@ -15,8 +15,12 @@ public class Controller : MonoBehaviour
     public VoidHandler onWantedPlayerList;
     public VoidHandler onWantedStartWidnow;
     public VoidHandler onWantedGameWindow;
+    public VoidHandler onBackPressed;
+    public GameStateHandler onGameStateChanged;
+    public LeftSecondsHandler onTimerTicked;
 
     private Player playerSlotSelecting;
+    private Player playerRoleSelecting;
 
     private void Awake()
     {    
@@ -30,6 +34,11 @@ public class Controller : MonoBehaviour
         }        
     }
 
+    public void NextState()
+    {
+        gameManager.NextState();
+    }
+
     private void Start()
     {
         if(gameManager == null)
@@ -37,7 +46,19 @@ public class Controller : MonoBehaviour
             gameManager = new GameManager();
             gameManager.onGameManagerGotError += ShowError;
             gameManager.onGameStarted += StartGame;
+            gameManager.onTimerTicked += TickTimer;
+            gameManager.onGameStateChanged += StateChange;
         }
+    }
+
+    public void ResetTime()
+    {
+        gameManager.ResetTimer();
+    }
+
+    public void BonusTime(int seconds)
+    {
+        gameManager.BonusTime(seconds);
     }
 
     private void Update()
@@ -57,10 +78,26 @@ public class Controller : MonoBehaviour
                 playerSlotSelecting = null;
                 break;
             case GameState.GIVE_ROLE:
-                onWantedGameWindow?.Invoke();
-                playerSlotSelecting = null;
+                if (playerSlotSelecting != null)
+                {
+                    onWantedGameWindow?.Invoke();
+                    playerSlotSelecting = null;
+                }
+                else
+                {
+                    onBackPressed?.Invoke();
+                    if (playerRoleSelecting != null)
+                    {
+                        playerRoleSelecting = null;
+                    }
+                }
                 break;
         }
+    }
+
+    public void PrepareForRole(Player player)
+    {
+        playerRoleSelecting = player;
     }
 
     public void PeopleClick(People peopleInfo)
@@ -80,6 +117,19 @@ public class Controller : MonoBehaviour
         }
     }
 
+    public void SelectRole(Role role)
+    {
+        if (playerRoleSelecting != null)
+        {
+            playerRoleSelecting.SetRole(role);
+            playerRoleSelecting = null;
+            onBackPressed?.Invoke();
+        }
+        else
+        {
+            onError?.Invoke("ERROR_NO_PLAYER_FOR_ROLE");
+        }
+    }
 
     public void SelectPeopleForSlot(Player player)
     {
@@ -92,12 +142,27 @@ public class Controller : MonoBehaviour
         onWantedPlayerList?.Invoke();
     }
 
-    public void StartNewGame(int playerCount)
+    public void CreateGame(int playerCount)
     {
-        gameManager.StartGame(playerCount);
+        gameManager.CreateGame(playerCount);
+    }
+
+    public void StartGame()
+    {
+        gameManager.StartGame();
     }
 
     #region Events Duplicates
+
+    private void StateChange(GameState gameState)
+    {
+        onGameStateChanged?.Invoke(gameState);
+    }
+
+    private void TickTimer(int now, int final)
+    {
+        onTimerTicked?.Invoke(now, final);
+    }
     private void ShowError(string errorText)
     {
         onError?.Invoke(errorText);

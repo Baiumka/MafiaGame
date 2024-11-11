@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class RolePrefab : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class RolePrefab : MonoBehaviour
 
     private void Start()
     {
+        this.GetComponent<Button>().onClick.AddListener(OnClick);
+
         switch(role)
         {
             case Role.CITIZEN:
@@ -42,5 +45,10 @@ public class RolePrefab : MonoBehaviour
                 break;
         }
         nicknameText.text = role.ToString();
+    }
+
+    private void OnClick()
+    {
+        Controller.singlton.SelectRole(role);
     }
 }
