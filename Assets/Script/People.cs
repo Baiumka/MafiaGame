@@ -9,4 +9,6 @@ public class People
     }
 
     public string Nickname { get => nickname; }
+
+   
 }

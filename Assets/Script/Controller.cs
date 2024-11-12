@@ -18,6 +18,9 @@ public class Controller : MonoBehaviour
     public VoidHandler onBackPressed;
     public GameStateHandler onGameStateChanged;
     public LeftSecondsHandler onTimerTicked;
+    public DayHandler onCameNewDay;
+    public SpeakHandler onNewSpeaker;
+    public VoteOfficialHandler onVoteOfficial;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -48,8 +51,12 @@ public class Controller : MonoBehaviour
             gameManager.onGameStarted += StartGame;
             gameManager.onTimerTicked += TickTimer;
             gameManager.onGameStateChanged += StateChange;
+            gameManager.onCameNewDay += NewDay;
+            gameManager.onNewSpeaker += ChangeSpeaker;
+            gameManager.onVoteOfficial += VoteOfficial;
         }
     }
+
 
     public void ResetTime()
     {
@@ -59,6 +66,11 @@ public class Controller : MonoBehaviour
     public void BonusTime(int seconds)
     {
         gameManager.BonusTime(seconds);
+    }
+
+    public void PutToVote(Player voted)
+    {
+        gameManager.PutToVote(voted);
     }
 
     private void Update()
@@ -133,8 +145,11 @@ public class Controller : MonoBehaviour
 
     public void SelectPeopleForSlot(Player player)
     {
-        onWantedPlayerList?.Invoke();
-        playerSlotSelecting = player;
+        if (gameManager.GameState == GameState.GIVE_ROLE)
+        {
+            onWantedPlayerList?.Invoke();
+            playerSlotSelecting = player;
+        }
     }
 
     public void ShowPlayerList()
@@ -171,6 +186,20 @@ public class Controller : MonoBehaviour
     private void StartGame(Game newGame)
     {
         onGameStarted?.Invoke(newGame);
+    }
+
+    private void ChangeSpeaker(Player player)
+    {
+        onNewSpeaker?.Invoke(player);
+    }
+
+    private void NewDay(int dayNumber)
+    {
+        onCameNewDay?.Invoke(dayNumber);
+    }
+    private void VoteOfficial(List<Player> votedPlayers)
+    {
+        onVoteOfficial?.Invoke(votedPlayers);
     }
     #endregion
 }

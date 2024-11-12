@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 
 public class Database 
@@ -31,6 +32,19 @@ public class Database
             result.Add(new People("Theron"));
             return result; 
         } 
+    }
+
+    public static People GetRandomPlayer()
+    {
+        List<People> players = AvaiblePeople;
+        if (players == null || players.Count == 0)
+        {
+            return null; // или выбросьте исключение, если список пуст
+        }
+
+        Random random = new Random();
+        int randomIndex = random.Next(players.Count);
+        return players[randomIndex];
     }
 
 }

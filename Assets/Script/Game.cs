@@ -7,9 +7,10 @@ using UnityEngine;
 public class Game
 {
     private List<Player> players;
-    
-    public int Citizens { get => players.Count(player => player.Role == Role.CITIZEN || player.Role == Role.SHERIFF); }
-    public int Mafia { get => players.Count(player => player.Role == Role.MAFIA || player.Role == Role.BOSS); }
+    public int Citizens { get => players.Count(player => (player.Role == Role.CITIZEN || player.Role == Role.SHERIFF) && !player.IsDead); }
+    public int Mafia { get => players.Count(player => (player.Role == Role.MAFIA || player.Role == Role.BOSS) && !player.IsDead); }
+    public List<Player> VotedPlayers { get => players.Where(player => player.IsVoted && !player.IsDead).ToList(); }
+
 
     public Game(int playerCount)
     {
@@ -22,18 +23,6 @@ public class Game
 
     public List<Player> Players { get => players; }
 
-    public void SetPlayer(Player player, People people)
-    {
-        foreach(Player p in players)
-        {
-            if(p.Equals(player))
-            {
-                p.SetPeople(people);
-                return;
-            }
-        }
-    }
-
     public bool CheckPlayer()
     {
         foreach(Player p in players)
@@ -43,5 +32,31 @@ public class Game
         }
         if (Mafia >= Citizens) return false;
         return true;
-    }  
+    }
+
+    public Player GetPlayerByNumber(int n)
+    {
+        Player answer = null;
+        int i = 0;
+        while(answer == null)
+        {
+            Player p = players[i];
+            if (p.Number == n)
+            {
+                if (!p.IsDead)
+                {
+                    answer = p;
+                    break;
+                }
+                else
+                {
+                    n++;
+                }
+            }
+            i++;
+            if (i >= players.Count) i = 0;
+            if (n > players.Count) n = 1;
+        }
+        return answer;
+    }
 }

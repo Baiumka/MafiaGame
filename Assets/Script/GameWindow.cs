@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameWindow : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameWindow : MonoBehaviour
     [SerializeField] GameObject roleContextMenu;
     [SerializeField] Button startGameButton;
     [SerializeField] TimerPanel timerPanel;
+    [SerializeField] TMP_Text dayText;
 
     private List<PlayerObject> playersList;
     private GameState visibleGameState = GameState.GIVE_ROLE;
@@ -27,9 +29,29 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onBackPressed += HideContextMenu;
         Controller.singlton.onGameStateChanged += ChangeState;
         Controller.singlton.onTimerTicked += TickTimer;
+        Controller.singlton.onCameNewDay += NewDay;
+        Controller.singlton.onNewSpeaker += ChangeSpeaker;
+        Controller.singlton.onVoteOfficial += VoteOfficial;
 
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
+    }
+
+    private void VoteOfficial(List<Player> votedPlayers)
+    {
+        ChangeState(GameState.VOTE_OFFIACIAL);
+        timerPanel.Clean();
+        timerPanel.VoteOfficial(votedPlayers);
+    }
+
+    private void ChangeSpeaker(Player player)
+    {
+        timerPanel.SetSpeaker(player);
+    }
+
+    private void NewDay(int dayNumber)
+    {
+        dayText.SetText(Translator.Message(Messages.DAY) + dayNumber);
     }
 
     private void TickTimer(int now, int final)
@@ -39,17 +61,37 @@ public class GameWindow : MonoBehaviour
 
     private void ChangeState(GameState gameState)
     {
+        if (visibleGameState == gameState) return;   
         visibleGameState = gameState;
-
         switch(visibleGameState)
         {
+            case GameState.VOTE_OFFIACIAL:
+                dayText.text = Translator.Message(Messages.COURT);
+                break;
+            case GameState.DAY:
+                timerPanel.gameObject.SetActive(true);
+                timerPanel.SetState(visibleGameState);
+                foreach(PlayerObject po in playersList)
+                {
+                    po.ShowVoteButton();
+                }
+                break;
+            case GameState.MORNING:
+                dayText.SetText(Translator.Message(Messages.MORNING));
+                timerPanel.Clean();
+                break;
             case GameState.FIRST_NIGHT_MAFIA:
                 startGameButton.gameObject.SetActive(false);
                 timerPanel.gameObject.SetActive(true);
                 timerPanel.SetState(visibleGameState);
+                dayText.SetText(Translator.Message(Messages.FIRST_NIGHT));
+                foreach (PlayerObject po in playersList)
+                {
+                    po.BlockRoleButton();
+                }
                 break;
             case GameState.FIRST_NIGHT_SHERIF:
-                timerPanel.SetState(visibleGameState);
+                timerPanel.SetState(visibleGameState);              
                 break;
             default:
                 break;

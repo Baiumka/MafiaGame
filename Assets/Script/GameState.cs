@@ -5,7 +5,10 @@ public enum GameState
    GIVE_ROLE,
    FIRST_NIGHT_MAFIA,
    FIRST_NIGHT_SHERIF,
+   MORNING,
    DAY,
+   VOTE_OFFIACIAL,
+   VOTE,
    NIGHT,
    END,
    CLOSING

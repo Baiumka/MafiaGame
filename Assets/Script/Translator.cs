@@ -9,6 +9,15 @@ public class Translator
     public static void Init()
     {
         firstDict = new Dictionary<Messages, string>();
+        firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосование выставлены игроки: ");
+        firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");
+        firstDict.Add(Messages.ALREADY_PUTTED, "Игрок уже выставлял кого-то");
+        firstDict.Add(Messages.ALREADY_VOTED, "Игрок уже выставлен на голосование");
+        firstDict.Add(Messages.COURT, "СУД");
+        firstDict.Add(Messages.DAY, "День ");
+        firstDict.Add(Messages.MORNING, "Доброе утро!");
+        firstDict.Add(Messages.SPEAKER, "Говорит игрок №");
+        firstDict.Add(Messages.FIRST_NIGHT, "Первая Ночь");
         firstDict.Add(Messages.FIRST_NIGHT_SHERIF, "Просыпается шериф, у него есть время что бы осмотреть город и поприветствовать ведущего!");
         firstDict.Add(Messages.FIRST_NIGHT_SHERIF_END, "Шериф засыпает.");
         firstDict.Add(Messages.FIRST_NIGHT_MAFIA, "Просыпается мафия, у неё есть минута что бы договориться!");
