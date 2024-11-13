@@ -45,16 +45,28 @@ public class PlayerObject : MonoBehaviour
     {
         this.playerInfo = player;
         this.playerInfo.onDataUpdated += RedrawPlayer;
-        this.playerInfo.onPlayerVoted += VotePlayer;
+        this.playerInfo.onPlayerPut += PutPlayer;
+        this.playerInfo.onPlayerVote += VotePlayer;        
         RedrawPlayer();
     }
 
     private void VotePlayer()
     {
-        voteButton.GetComponent<Image>().color = Color.red;
+        nicknameButton.GetComponent<Image>().color = Color.yellow;
     }
 
     private void UnVotePlayer()
+    {
+        nicknameButton.GetComponent<Image>().color = Color.white;
+    }
+
+
+    private void PutPlayer()
+    {
+        voteButton.GetComponent<Image>().color = Color.red;
+    }
+
+    private void UnPutPlayer()
     {
         voteButton.GetComponent<Image>().color = Color.white;
     }
@@ -72,8 +84,11 @@ public class PlayerObject : MonoBehaviour
             {
                 nicknameText.text = playerInfo.People.Nickname;
             }
-            if (playerInfo.IsVoted) VotePlayer();
+            if (playerInfo.IsPutted) PutPlayer();
+            else UnPutPlayer();
+            if (playerInfo.Voted != null) VotePlayer();
             else UnVotePlayer();
+
             RedrawRole();
         }
     }

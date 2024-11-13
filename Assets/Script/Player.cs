@@ -8,11 +8,13 @@ public class Player
     private People people;
     private Role role = Role.NONE;
     private bool isDead = false;
-    private bool isVoted = false;
+    private bool isPutted = false;
+    private Player voted;
 
 
     public VoidHandler onDataUpdated;
-    public VoteHandler onPlayerVoted;
+    public VoteHandler onPlayerPut;
+    public VoteHandler onPlayerVote;
 
     public Player(int number)
     {
@@ -24,13 +26,21 @@ public class Player
     public People People { get => people;}
     public Role Role { get => role; }
     public bool IsDead { get => isDead; }
-    public bool IsVoted { get => isVoted; }
+    public bool IsPutted { get => isPutted; }
+    public Player Voted { get => voted; }
 
-    public void Vote()
+    public void Put()
     {
-        isVoted = true;
-        onPlayerVoted?.Invoke();
+        isPutted = true;
+        onPlayerPut?.Invoke();
     }
+
+    public void Vote(Player player)
+    {
+        voted = player;
+        onPlayerVote?.Invoke();
+    }
+
 
     public void Die()
     {
@@ -50,9 +60,15 @@ public class Player
         onDataUpdated?.Invoke();
     }
 
+    public void UnPut()
+    {
+        isPutted = false;
+        onDataUpdated?.Invoke();
+    }
+
     public void UnVote()
     {
-        isVoted = false;
+        voted = null;
         onDataUpdated?.Invoke();
     }
 }

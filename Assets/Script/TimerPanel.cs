@@ -20,7 +20,8 @@ public class TimerPanel : MonoBehaviour
         resetButton.onClick.AddListener(ResetTimer);
         bonusButton.onClick.AddListener(BonusTimer);
         nextButton.onClick.AddListener(NextState);
-        //seocndsText.text = "реяр";
+        seocndsText.color = Color.white;
+        seocndsText.text = "";
     }
 
     private void NextState()
@@ -51,6 +52,18 @@ public class TimerPanel : MonoBehaviour
     public void SetSpeaker(Player player)
     {
         headText.text = Translator.Message(Messages.SPEAKER) + player.Number + " " + player.People.Nickname;
+    }
+
+    public void SetVoteCount(int i)
+    {
+        seocndsText.color = Color.red;
+        seocndsText.text =  Translator.Message(Messages.VOTES_COUNT) +  " " + i;
+    }
+
+    public void VotePlayer(Player player)
+    {
+        headText.text = Translator.Message(Messages.VOTE) + player.Number + "?";
+        seocndsText.text = "";
     }
 
     public void VoteOfficial(List<Player> votedPlayers)

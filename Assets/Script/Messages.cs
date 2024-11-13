@@ -18,4 +18,8 @@ public enum Messages
     COURT,
     VOTE_OFFICIAL1,
     VOTE_OFFICIAL2,
+    VOTE,
+    ALREADY_VOTED_VOTE,
+    TOO_LATE_UNVOTE,
+    VOTES_COUNT,
 }

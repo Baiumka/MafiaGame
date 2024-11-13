@@ -9,7 +9,14 @@ public enum GameState
    DAY,
    VOTE_OFFIACIAL,
    VOTE,
+   DOP_SPEAK,
+   DOP_VOTE_OFFICIAL,
+   DOP_VOTE,
+   VOTE_LAST_WORD,
    NIGHT,
+   SHOOTING,
+   BOSS,
+   SHERIF,
    END,
    CLOSING
 }

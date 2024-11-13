@@ -19,8 +19,10 @@ public class Controller : MonoBehaviour
     public GameStateHandler onGameStateChanged;
     public LeftSecondsHandler onTimerTicked;
     public DayHandler onCameNewDay;
-    public SpeakHandler onNewSpeaker;
+    public PlayerHandler onNewSpeaker;
+    public PlayerHandler onPlayerVotedTurn;
     public VoteOfficialHandler onVoteOfficial;
+    public IntHandler onVotesChanged;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -54,9 +56,12 @@ public class Controller : MonoBehaviour
             gameManager.onCameNewDay += NewDay;
             gameManager.onNewSpeaker += ChangeSpeaker;
             gameManager.onVoteOfficial += VoteOfficial;
+            gameManager.onPlayerVotedTurn += VotedTurn;
+            gameManager.onVotesChanged += UpdateVotes;
         }
     }
 
+    
 
     public void ResetTime()
     {
@@ -150,6 +155,17 @@ public class Controller : MonoBehaviour
             onWantedPlayerList?.Invoke();
             playerSlotSelecting = player;
         }
+        else if(gameManager.GameState == GameState.VOTE)
+        {
+            if (player.Voted == null)
+            {
+                gameManager.Vote(player);
+            }
+            else
+            {
+                gameManager.TryUnVote(player);
+            }
+        }
     }
 
     public void ShowPlayerList()
@@ -173,6 +189,10 @@ public class Controller : MonoBehaviour
     {
         onGameStateChanged?.Invoke(gameState);
     }
+    private void VotedTurn(Player player)
+    {
+        onPlayerVotedTurn?.Invoke(player);
+    }
 
     private void TickTimer(int now, int final)
     {
@@ -183,6 +203,10 @@ public class Controller : MonoBehaviour
         onError?.Invoke(errorText);
     }
 
+    private void UpdateVotes(int i)
+    {
+        onVotesChanged?.Invoke(i);
+    }
     private void StartGame(Game newGame)
     {
         onGameStarted?.Invoke(newGame);

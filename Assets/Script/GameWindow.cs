@@ -32,9 +32,22 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onCameNewDay += NewDay;
         Controller.singlton.onNewSpeaker += ChangeSpeaker;
         Controller.singlton.onVoteOfficial += VoteOfficial;
+        Controller.singlton.onPlayerVotedTurn += VoteTurn;
+        Controller.singlton.onVotesChanged += UpdateVotes;
 
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
+    }
+
+    private void UpdateVotes(int i)
+    {
+        timerPanel.SetVoteCount(i);
+    }
+
+    private void VoteTurn(Player player)
+    {
+        ChangeState(GameState.VOTE);
+        timerPanel.VotePlayer(player);
     }
 
     private void VoteOfficial(List<Player> votedPlayers)
@@ -65,8 +78,19 @@ public class GameWindow : MonoBehaviour
         visibleGameState = gameState;
         switch(visibleGameState)
         {
+            case GameState.VOTE:
+                dayText.text = Translator.Message(Messages.COURT);
+                foreach (PlayerObject po in playersList)
+                {
+                    po.HideVoteButton();
+                }
+                break;
             case GameState.VOTE_OFFIACIAL:
                 dayText.text = Translator.Message(Messages.COURT);
+                foreach (PlayerObject po in playersList)
+                {
+                    po.HideVoteButton();
+                }
                 break;
             case GameState.DAY:
                 timerPanel.gameObject.SetActive(true);

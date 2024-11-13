@@ -9,10 +9,14 @@ public class Translator
     public static void Init()
     {
         firstDict = new Dictionary<Messages, string>();
-        firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосование выставлены игроки: ");
-        firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");
+        firstDict.Add(Messages.TOO_LATE_UNVOTE, "Этот игрок голосовал в другого игрока. Отменить его голос нельзя.");
+        firstDict.Add(Messages.VOTES_COUNT, "Голосов: ");
+        firstDict.Add(Messages.VOTE, "Кто против игрока №");
+        firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосвание выставлены игроки: ");        
+        firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");        
         firstDict.Add(Messages.ALREADY_PUTTED, "Игрок уже выставлял кого-то");
         firstDict.Add(Messages.ALREADY_VOTED, "Игрок уже выставлен на голосование");
+        firstDict.Add(Messages.ALREADY_VOTED_VOTE, "Этот игрок уже голосовал.");
         firstDict.Add(Messages.COURT, "СУД");
         firstDict.Add(Messages.DAY, "День ");
         firstDict.Add(Messages.MORNING, "Доброе утро!");
@@ -29,7 +33,14 @@ public class Translator
 
     public static string Message(Messages message)
     {
-        return firstDict[message];
+        try
+        {
+            return firstDict[message];
+        }
+        catch 
+        {
+            return "Exception by tranlator on Message: " + message;
+        }
     }
 
 }

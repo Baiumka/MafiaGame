@@ -9,7 +9,7 @@ public class Game
     private List<Player> players;
     public int Citizens { get => players.Count(player => (player.Role == Role.CITIZEN || player.Role == Role.SHERIFF) && !player.IsDead); }
     public int Mafia { get => players.Count(player => (player.Role == Role.MAFIA || player.Role == Role.BOSS) && !player.IsDead); }
-    public List<Player> VotedPlayers { get => players.Where(player => player.IsVoted && !player.IsDead).ToList(); }
+    public List<Player> VotedPlayers { get => players.Where(player => player.IsPutted && !player.IsDead).ToList(); }
 
 
     public Game(int playerCount)

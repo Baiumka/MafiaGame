@@ -7,8 +7,9 @@ public delegate void ErrorHandler(string errorText);
 public delegate void GameStateHandler(GameState gameState);
 public delegate void LeftSecondsHandler(int now, int final);
 public delegate void DayHandler(int dayNumber);
-public delegate void SpeakHandler(Player player);
+public delegate void PlayerHandler(Player player);
 public delegate void VoteOfficialHandler(List<Player> votedPlayers);
+public delegate void IntHandler(int i);
 public class GameManager 
 {
     private Game currentGame;
@@ -20,7 +21,9 @@ public class GameManager
     private Player speakPlayer;
     private bool isPutted;
     private List<Player> votedPlayers = new List<Player>();
-    
+    private Dictionary<Player, int> voteResult;
+    private int votePlayerIndex;
+    private int dopSpkeakIndex;
 
     private GameState gameState;
     public StartGameHandler onGameStarted;
@@ -28,9 +31,14 @@ public class GameManager
     public GameStateHandler onGameStateChanged;
     public LeftSecondsHandler onTimerTicked;
     public DayHandler onCameNewDay;
-    public SpeakHandler onNewSpeaker;
+    public PlayerHandler onNewSpeaker;
+    public PlayerHandler onPlayerVotedTurn;  
     public VoteOfficialHandler onVoteOfficial;
-
+    public IntHandler onVotesChanged;
+    //Ќе отображено:
+    public VoteOfficialHandler onDopSpeakOfficial;
+    public VoteOfficialHandler onDopVoteOfficial;
+    public PlayerHandler onDopSpeakStarted;
     public GameState GameState { get => gameState; }
 
     public GameManager()
@@ -43,7 +51,7 @@ public class GameManager
 
     public void PutToVote(Player voted)
     {
-        if(voted.IsVoted)
+        if(voted.IsPutted)
         {
             onGameManagerGotError?.Invoke(Translator.Message(Messages.ALREADY_VOTED));
             return;
@@ -53,7 +61,7 @@ public class GameManager
             onGameManagerGotError?.Invoke(Translator.Message(Messages.ALREADY_PUTTED));
             return;
         }
-        voted.Vote();
+        voted.Put();
         votedPlayers.Add(voted);
         History.Add(speakPlayer, voted);
         isPutted = true;
@@ -78,13 +86,94 @@ public class GameManager
     {
         switch (gameState)
         {
+            case GameState.DOP_SPEAK:
+                dopSpkeakIndex++;
+                if (dopSpkeakIndex >= votedPlayers.Count)
+                {
+                    timer.Stop();
+                    onDopVoteOfficial?.Invoke(votedPlayers);
+                    SetState(GameState.DOP_VOTE_OFFICIAL);
+                    
+                }
+                else
+                {
+                    speakPlayer = votedPlayers[dopSpkeakIndex];
+                    onDopSpeakStarted?.Invoke(speakPlayer);
+                    StartTimer(30);
+                }
+                break;
+            case GameState.VOTE:
+                if (votePlayerIndex == votedPlayers.Count - 1)
+                {
+                    foreach (Player p in currentGame.Players)
+                    {
+                        if (p.Voted == null) Vote(p);
+                    }
+                }
+                votePlayerIndex++;                
+                if (votePlayerIndex >= votedPlayers.Count)
+                {
+                    //заканчиваем голосование
+                    int max = 0;
+                    List<Player> maxsPlayers = new List<Player>();
+                    foreach(Player p in voteResult.Keys)
+                    {
+                        if(voteResult[p] > max)
+                        {
+                            max = voteResult[p];
+                            maxsPlayers.Clear();
+                            maxsPlayers.Add(p);
+                        }
+                        if(voteResult[p] == max && max > 0)
+                        {
+                            maxsPlayers.Add(p);
+                        }
+                    }
+                    if(maxsPlayers.Count == 1)
+                    {
+                        GiveLastWord(maxsPlayers[0]);
+                    }
+                    else
+                    {
+                        dopSpkeakIndex = -1;
+                        votedPlayers = maxsPlayers;
+                        onDopSpeakOfficial?.Invoke(maxsPlayers);
+                        SetState(GameState.DOP_SPEAK);
+                    }
+                }
+                else
+                {
+                    onPlayerVotedTurn?.Invoke(votedPlayers[votePlayerIndex]);
+                }
+                break;
+            case GameState.VOTE_OFFIACIAL:
+                votePlayerIndex = 0;
+                
+                if(votedPlayers.Count == 0)
+                {
+                    SetState(GameState.NIGHT);
+                }
+                else if(votedPlayers.Count == 1)
+                {
+                    GiveLastWord(votedPlayers[0]);
+                }
+                else
+                {
+                    voteResult = new Dictionary<Player, int>();
+                    foreach (Player p in votedPlayers)
+                        voteResult[p] = 0;
+                    SetState(GameState.VOTE);
+                    onPlayerVotedTurn?.Invoke(votedPlayers[votePlayerIndex]);
+                }    
+                break;
             case GameState.DAY:
                 isPutted = false;
                 Player nextPlayer = currentGame.GetPlayerByNumber(speakPlayer.Number+1);
                 if (nextPlayer == firstSpeaker)
-                {                    
+                {
+                    timer.Stop();
                     SetState(GameState.VOTE_OFFIACIAL);
-                    onVoteOfficial?.Invoke(votedPlayers);
+                    onVoteOfficial?.Invoke(votedPlayers);                    
                 }
                 else
                 {
@@ -96,7 +185,7 @@ public class GameManager
             case GameState.MORNING:
                 foreach(Player player in currentGame.Players)
                 {
-                    player.UnVote();
+                    player.UnPut();
                 }
                 votedPlayers.Clear();                
                 onCameNewDay?.Invoke(currentTurn);
@@ -118,6 +207,38 @@ public class GameManager
                 break;
         }
 
+    }
+
+    private void GiveLastWord(Player player)
+    {
+        SetState(GameState.VOTE_LAST_WORD);
+    }
+
+    public void Vote(Player player)
+    {
+        if (player.Voted != null)
+        {
+            onGameManagerGotError?.Invoke(Translator.Message(Messages.ALREADY_VOTED_VOTE));
+            return;
+        }
+        player.Vote(votedPlayers[votePlayerIndex]);
+        voteResult[votedPlayers[votePlayerIndex]]++;
+        onVotesChanged?.Invoke(voteResult[votedPlayers[votePlayerIndex]]);
+    }
+
+    public void TryUnVote(Player player)
+    {
+        if (player.Voted == votedPlayers[votePlayerIndex])
+        {
+            player.UnVote();
+            voteResult[votedPlayers[votePlayerIndex]]--;
+            onVotesChanged?.Invoke(voteResult[votedPlayers[votePlayerIndex]]);
+        }
+        else
+        {
+            onGameManagerGotError?.Invoke(Translator.Message(Messages.TOO_LATE_UNVOTE));
+            return;
+        }
     }
 
     public void StartGame()
