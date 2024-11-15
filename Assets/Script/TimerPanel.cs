@@ -66,9 +66,21 @@ public class TimerPanel : MonoBehaviour
         seocndsText.text = "";
     }
 
+    public void LastWord(Player player)
+    {
+        Clean();
+        headText.text = player.People.Nickname + " " + Translator.Message(Messages.YOUR_LAST_WORD);
+    }
+
     public void DopVoteOfficial(List<Player> votedPlayers)
     {
         VoteOfficial(votedPlayers);
+    }
+
+    public void StartNight()
+    {
+        Clean();
+        headText.text = Translator.Message(Messages.START_NIGHT);
     }
 
     public void VoteOfficial(List<Player> votedPlayers)
@@ -101,6 +113,12 @@ public class TimerPanel : MonoBehaviour
         }
         playersText += "\n";
         headText.text = Translator.Message(Messages.DOP_SPEAK_OFFICIAL1) + playersText + " " + Translator.Message(Messages.DOP_SPEAK_OFFICIAL2);
+    }
+
+    public void VoteForUp()
+    {
+        Clean();
+        headText.text = Translator.Message(Messages.VOTE_FOR_UP);
     }
 
     private void OnTimerEnd()

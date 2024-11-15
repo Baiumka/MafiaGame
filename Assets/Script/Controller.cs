@@ -26,6 +26,8 @@ public class Controller : MonoBehaviour
     public VoteOfficialHandler onDopSpeakOfficial;
     public VoteOfficialHandler onDopVoteOfficial;
     public PlayerHandler onDopSpeakStarted;
+    public PlayerHandler onLastWordStarted;
+    public VoidHandler onNightStarted;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -64,9 +66,10 @@ public class Controller : MonoBehaviour
             gameManager.onDopSpeakOfficial += DopSpeakOfficial;
             gameManager.onDopSpeakStarted += DopSpeakStarted;
             gameManager.onDopVoteOfficial += DopVoteOfficial;
+            gameManager.onNightStarted += StartNight;
+            gameManager.onLastWordStarted += StartLastWord;
         }
     }
-
 
     public void ResetTime()
     {
@@ -160,7 +163,7 @@ public class Controller : MonoBehaviour
             onWantedPlayerList?.Invoke();
             playerSlotSelecting = player;
         }
-        else if(gameManager.GameState == GameState.VOTE)
+        else if (gameManager.GameState == GameState.VOTE || gameManager.GameState == GameState.DOP_VOTE || gameManager.GameState == GameState.VOTE_FOR_UP)
         {
             if (player.Voted == null)
             {
@@ -170,7 +173,7 @@ public class Controller : MonoBehaviour
             {
                 gameManager.TryUnVote(player);
             }
-        }
+        }       
     }
 
     public void ShowPlayerList()
@@ -190,6 +193,15 @@ public class Controller : MonoBehaviour
 
     #region Events Duplicates
 
+    private void StartLastWord(Player player)
+    {
+        onLastWordStarted?.Invoke(player);
+    }
+
+    private void StartNight()
+    {
+        onNightStarted?.Invoke();
+    }
     private void StateChange(GameState gameState)
     {
         onGameStateChanged?.Invoke(gameState);

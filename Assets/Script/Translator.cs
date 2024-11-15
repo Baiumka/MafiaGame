@@ -9,6 +9,8 @@ public class Translator
     public static void Init()
     {
         firstDict = new Dictionary<Messages, string>();
+        firstDict.Add(Messages.YOUR_LAST_WORD, ", у вас минута на последнее слово.");
+        firstDict.Add(Messages.VOTE_FOR_UP, "Кто за то что бы поднять обоих?");
         firstDict.Add(Messages.DOP_SPEAK_OFFICIAL2, "У них есть по 30 секунд.");
         firstDict.Add(Messages.DOP_SPEAK_OFFICIAL1, "У нас перестрелка между игроками: ");
         firstDict.Add(Messages.TOO_LATE_UNVOTE, "Этот игрок голосовал в другого игрока. Отменить его голос нельзя.");
@@ -20,8 +22,11 @@ public class Translator
         firstDict.Add(Messages.ALREADY_PUTTED, "Игрок уже выставлял кого-то");
         firstDict.Add(Messages.ALREADY_VOTED, "Игрок уже выставлен на голосование");
         firstDict.Add(Messages.ALREADY_VOTED_VOTE, "Этот игрок уже голосовал.");
+        firstDict.Add(Messages.ALREADY_DEAD, "Этот игрок уже мёртв.");
         firstDict.Add(Messages.COURT, "СУД");
         firstDict.Add(Messages.DAY, "День ");
+        firstDict.Add(Messages.NIGHT, "Ночь");
+        firstDict.Add(Messages.START_NIGHT, "В городе наступает ночь. Все засыпают.");
         firstDict.Add(Messages.MORNING, "Доброе утро!");
         firstDict.Add(Messages.SPEAKER, "Говорит игрок №");
         firstDict.Add(Messages.FIRST_NIGHT, "Первая Ночь");

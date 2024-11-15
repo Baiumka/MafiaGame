@@ -47,7 +47,13 @@ public class PlayerObject : MonoBehaviour
         this.playerInfo.onDataUpdated += RedrawPlayer;
         this.playerInfo.onPlayerPut += PutPlayer;
         this.playerInfo.onPlayerVote += VotePlayer;        
+        this.playerInfo.onPlayerDie += Die;        
         RedrawPlayer();
+    }
+
+    private void Die()
+    {
+        this.gameObject.SetActive(false);
     }
 
     private void VotePlayer()

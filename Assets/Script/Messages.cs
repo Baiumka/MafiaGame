@@ -26,4 +26,9 @@ public enum Messages
     DOP_VOTE_OFFICIAL,
     DOP_SPEAK_OFFICIAL2,
     DOP_SPEAK_OFFICIAL1,
+    VOTE_FOR_UP,
+    ALREADY_DEAD,
+    NIGHT,
+    START_NIGHT,
+    YOUR_LAST_WORD,
 }

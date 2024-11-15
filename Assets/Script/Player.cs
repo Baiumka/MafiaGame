@@ -15,6 +15,7 @@ public class Player
     public VoidHandler onDataUpdated;
     public VoteHandler onPlayerPut;
     public VoteHandler onPlayerVote;
+    public VoteHandler onPlayerDie;
 
     public Player(int number)
     {
@@ -45,7 +46,7 @@ public class Player
     public void Die()
     {
         isDead = true;
-        onDataUpdated?.Invoke();
+        onPlayerDie?.Invoke();
     }
 
     public void SetPeople(People people)
