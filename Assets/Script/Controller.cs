@@ -32,6 +32,8 @@ public class Controller : MonoBehaviour
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
 
+    public int MaxPlayerCount { get => gameManager.MaxPlayerCount; }
+
     private void Awake()
     {    
         if (singlton == null)
@@ -46,7 +48,34 @@ public class Controller : MonoBehaviour
 
     public void NextState()
     {
-        gameManager.NextState();
+        if (gameManager.GameState == GameState.SHOOTING)
+        {
+            DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.MISS_SHOOTING_CONFIRM),
+            () => gameManager.NextState(),
+            null
+            );
+        }
+        else if (gameManager.GameState == GameState.BOSS)
+        {
+            DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.MISS_BOSS_CHECK_CONFIRM),
+            () => gameManager.NextState(),
+            null
+            );
+        }
+        else if (gameManager.GameState == GameState.SHERIF)
+        {
+            DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.MISS_SHERIF_CHECK_CONFIRM),
+            () => gameManager.NextState(),
+            null
+            );
+        }
+        else
+        {
+            gameManager.NextState();
+        }
     }
 
     private void Start()
@@ -96,6 +125,12 @@ public class Controller : MonoBehaviour
 
     private void ReturnBack()
     {
+        if(DialogWindow.dialog.IsShown)
+        {
+            DialogWindow.dialog.CloseDialog();
+            return;
+        }
+
         switch (gameManager.GameState)
         {
             case GameState.NONE:
@@ -173,7 +208,27 @@ public class Controller : MonoBehaviour
             {
                 gameManager.TryUnVote(player);
             }
-        }       
+        }
+        else if (gameManager.GameState == GameState.SHOOTING)
+        {
+            DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.SHOOTING_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            () => gameManager.ShotPlayer(player),
+            null
+            );
+        }
+        else if (gameManager.GameState == GameState.BOSS)
+        {
+            DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.SHERIF_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            () => gameManager.SherifCheckPlayer(player),
+            null
+            );
+        }
+        else if (gameManager.GameState == GameState.BEST_TURN)
+        {
+            gameManager.AddBestTurn(player);
+        }
     }
 
     public void ShowPlayerList()

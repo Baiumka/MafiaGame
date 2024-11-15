@@ -111,6 +111,18 @@ public class GameWindow : MonoBehaviour
         visibleGameState = gameState;
         switch(visibleGameState)
         {
+            case GameState.BEST_TURN:
+                timerPanel.SetState(visibleGameState);
+                break;
+            case GameState.SHERIF:
+                timerPanel.SetState(visibleGameState);
+                break;
+            case GameState.BOSS:
+                timerPanel.SetState(visibleGameState);                
+                break;
+            case GameState.SHOOTING:
+                timerPanel.SetState(visibleGameState);
+                break;
             case GameState.VOTE_FOR_UP:
                 timerPanel.VoteForUp();
                 break;

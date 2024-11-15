@@ -19,6 +19,8 @@ public enum GameState
    SHOOTING,
    BOSS,
    SHERIF,
+   BEST_TURN,
+   SHOT_LAST_WORD,
    END,
    CLOSING
 }

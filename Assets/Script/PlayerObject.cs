@@ -22,6 +22,7 @@ public class PlayerObject : MonoBehaviour
         nicknameButton.onClick.AddListener(onNickNameClicked);
         roleButton.onClick.AddListener(onRoleButtonClicked);
         voteButton.onClick.AddListener(onVoteButtonClicked);
+        
 
         voteButton.gameObject.SetActive(false);
     }
@@ -48,7 +49,14 @@ public class PlayerObject : MonoBehaviour
         this.playerInfo.onPlayerPut += PutPlayer;
         this.playerInfo.onPlayerVote += VotePlayer;        
         this.playerInfo.onPlayerDie += Die;        
+        this.playerInfo.onPreparedForDie += PrepareDie;        
+        this.playerInfo.onAddedToBestTurn += VotePlayer;        
         RedrawPlayer();
+    }
+
+    private void PrepareDie()
+    {
+        nicknameButton.GetComponent<Image>().color = Color.red;
     }
 
     private void Die()

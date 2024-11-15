@@ -10,12 +10,15 @@ public class Player
     private bool isDead = false;
     private bool isPutted = false;
     private Player voted;
+    private bool isBestTurn;
 
 
     public VoidHandler onDataUpdated;
     public VoteHandler onPlayerPut;
     public VoteHandler onPlayerVote;
     public VoteHandler onPlayerDie;
+    public VoteHandler onPreparedForDie;
+    public VoteHandler onAddedToBestTurn;
 
     public Player(int number)
     {
@@ -29,6 +32,7 @@ public class Player
     public bool IsDead { get => isDead; }
     public bool IsPutted { get => isPutted; }
     public Player Voted { get => voted; }
+    public bool IsBestTurn { get => isBestTurn; }
 
     public void Put()
     {
@@ -70,6 +74,23 @@ public class Player
     public void UnVote()
     {
         voted = null;
+        onDataUpdated?.Invoke();
+    }
+
+    public void PrepareForDie()
+    {
+        onPreparedForDie?.Invoke();
+    }
+
+    public void AddBestTurn()
+    {
+        isBestTurn = true;
+        onAddedToBestTurn?.Invoke();
+    }
+
+    public void RemoveBestTurn()
+    {
+        isBestTurn = false;
         onDataUpdated?.Invoke();
     }
 }

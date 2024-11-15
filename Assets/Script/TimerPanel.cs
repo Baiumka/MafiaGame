@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Timers;
 
 public class TimerPanel : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class TimerPanel : MonoBehaviour
     [SerializeField] private TMP_Text headText;
     public int currentSeconds;
     private GameState currentGameState;
+    Timer timer;
+    int timerTicks;
 
     private void Start()
     {
@@ -22,6 +25,19 @@ public class TimerPanel : MonoBehaviour
         nextButton.onClick.AddListener(NextState);
         seocndsText.color = Color.white;
         seocndsText.text = "";
+
+        timer = new Timer(2000);
+        timer.Elapsed += OnTimerTick;
+        timer.AutoReset = true;
+    }
+
+    private void OnTimerTick(object sender, ElapsedEventArgs e)
+    {
+        if (timerTicks < Controller.singlton.MaxPlayerCount)
+        {
+            timerTicks++;
+            seocndsText.text = timerTicks.ToString();
+        }        
     }
 
     private void NextState()
@@ -142,6 +158,23 @@ public class TimerPanel : MonoBehaviour
         currentGameState = gameState;
         switch(gameState)
         {
+            case GameState.BEST_TURN:
+                headText.text = Translator.Message(Messages.BEST_TURN);
+                break;
+            case GameState.SHERIF:                
+                headText.text = Translator.Message(Messages.SHERIF_CHEKING);
+                break;
+            case GameState.BOSS:
+                Clean();
+                headText.text = Translator.Message(Messages.BOSS_CHEKING);
+                timerTicks = 0;
+                timer.Stop();
+                break;
+            case GameState.SHOOTING:
+                headText.text = Translator.Message(Messages.MAFIA_SHOOTING);
+                timerTicks = 0;
+                timer.Start();
+                break;
             case GameState.FIRST_NIGHT_MAFIA:
                 headText.text = Translator.Message(Messages.FIRST_NIGHT_MAFIA);
                 break;

@@ -24,6 +24,9 @@ public class GameManager
     private Dictionary<Player, int> voteResult;
     private int votePlayerIndex;
     private int dopSpkeakIndex;
+    private Player shootedPlayer;
+    private Player firstKilled;
+    private List<Player> bestTurn;
 
     private GameState gameState;
     public StartGameHandler onGameStarted;
@@ -41,6 +44,7 @@ public class GameManager
     public PlayerHandler onLastWordStarted;
     public VoidHandler onNightStarted;
     public GameState GameState { get => gameState; }
+    public int MaxPlayerCount { get => currentGame.Players.Count; }
 
     public GameManager()
     {
@@ -123,6 +127,38 @@ public class GameManager
     {
         switch (gameState)
         {
+            case GameState.BEST_TURN:
+                SetState(GameState.MORNING);
+                break;
+            case GameState.SHERIF:
+                if (currentTurn == 1 && shootedPlayer != null)
+                {
+                    firstKilled = shootedPlayer;
+                    bestTurn = new List<Player>();
+                    SetState(GameState.BEST_TURN);
+                    StartTimer(20);
+                }
+                else
+                {
+                    SetState(GameState.MORNING);                    
+                }
+                
+                break;
+            case GameState.BOSS:
+                SetState(GameState.SHERIF);
+                StartTimer(30);
+                //Добавляем лог
+                break;
+            case GameState.SHOOTING:
+                shootedPlayer = null;
+                SetState(GameState.BOSS);
+                StartTimer(30);
+                //Добавляем лог
+                break;
+            case GameState.NIGHT:
+                shootedPlayer = null;
+                SetState(GameState.SHOOTING);
+                break;
             case GameState.DOP_VOTE_LAST_WORD:
                 votePlayerIndex++;
                 if(votePlayerIndex < votedPlayers.Count)
@@ -260,11 +296,19 @@ public class GameManager
                 }
                 break;
             case GameState.MORNING:
+                if(shootedPlayer != null)
+                {
+                    GiveLastWord(shootedPlayer);
+                    shootedPlayer = null;
+                    break;
+                }
+
                 foreach(Player player in currentGame.Players)
                 {
                     player.UnPut();
                 }
-                votedPlayers.Clear();                
+                votedPlayers.Clear();
+                currentTurn++;
                 onCameNewDay?.Invoke(currentTurn);
                 speakPlayer = currentGame.GetPlayerByNumber(currentTurn);
                 firstSpeaker = speakPlayer;
@@ -286,6 +330,44 @@ public class GameManager
 
     }
 
+    public void AddBestTurn(Player player)
+    {
+        if(bestTurn != null)
+        {
+            if(bestTurn.Contains(player))
+            {
+                bestTurn.Remove(player);
+                player.RemoveBestTurn();
+            }
+            else
+            {
+                bestTurn.Add(player);
+                player.AddBestTurn();
+            }
+            
+        }
+    }
+
+    public void SherifCheckPlayer(Player player)
+    {
+        NextState();
+        //Добавляем лог
+    }
+
+    public void BossCheckPlayer(Player player)
+    {
+        
+        //Добавляем лог
+    }
+
+    public void ShotPlayer(Player player)
+    {
+        NextState();
+        shootedPlayer = player;
+        player.PrepareForDie();
+        //Добавляем лог
+    }
+
     private void StartNight()
     {
         foreach (Player p in currentGame.Players)
@@ -301,6 +383,10 @@ public class GameManager
         {
             SetState(GameState.DOP_VOTE_LAST_WORD);
         }
+        else if(gameState == GameState.MORNING)
+        {
+            SetState(GameState.SHOT_LAST_WORD);
+        }
         else
         {
             SetState(GameState.VOTE_LAST_WORD);
@@ -309,6 +395,11 @@ public class GameManager
         onLastWordStarted?.Invoke(player);
         StartTimer(60);
         
+    }
+
+    private void SetState(object sHOT_LAST_WORD)
+    {
+        throw new NotImplementedException();
     }
 
     public void Vote(Player player)

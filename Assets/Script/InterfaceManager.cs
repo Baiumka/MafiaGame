@@ -8,6 +8,7 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] GameWindow gameWindow;
     [SerializeField] StartWindow startWindow;
     [SerializeField] SelectPlayerWindow selectPlayerWindow;
+    //[SerializeField] DialogWindow dialog;
     private void Start()
     {
         Controller.singlton.onError += ShowError;
