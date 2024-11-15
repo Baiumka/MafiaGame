@@ -113,7 +113,6 @@ public class GameManager
                 votePlayerIndex++;                
                 if (votePlayerIndex >= votedPlayers.Count)
                 {
-                    //заканчиваем голосование
                     int max = 0;
                     List<Player> maxsPlayers = new List<Player>();
                     foreach(Player p in voteResult.Keys)

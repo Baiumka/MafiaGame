@@ -9,9 +9,12 @@ public class Translator
     public static void Init()
     {
         firstDict = new Dictionary<Messages, string>();
+        firstDict.Add(Messages.DOP_SPEAK_OFFICIAL2, "У них есть по 30 секунд.");
+        firstDict.Add(Messages.DOP_SPEAK_OFFICIAL1, "У нас перестрелка между игроками: ");
         firstDict.Add(Messages.TOO_LATE_UNVOTE, "Этот игрок голосовал в другого игрока. Отменить его голос нельзя.");
         firstDict.Add(Messages.VOTES_COUNT, "Голосов: ");
         firstDict.Add(Messages.VOTE, "Кто против игрока №");
+        firstDict.Add(Messages.CROSSFIRE, "Перестрелка");
         firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосвание выставлены игроки: ");        
         firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");        
         firstDict.Add(Messages.ALREADY_PUTTED, "Игрок уже выставлял кого-то");

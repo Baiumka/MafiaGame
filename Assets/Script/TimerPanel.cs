@@ -66,6 +66,11 @@ public class TimerPanel : MonoBehaviour
         seocndsText.text = "";
     }
 
+    public void DopVoteOfficial(List<Player> votedPlayers)
+    {
+        VoteOfficial(votedPlayers);
+    }
+
     public void VoteOfficial(List<Player> votedPlayers)
     {
         string playersText = "\n";
@@ -83,6 +88,19 @@ public class TimerPanel : MonoBehaviour
         }
         playersText += "\n";
         headText.text = Translator.Message(Messages.VOTE_OFFICIAL1) + playersText + Translator.Message(Messages.VOTE_OFFICIAL2) + playersText + "";
+    }
+
+    public void DopSpeakOfficial(List<Player> votedPlayers)
+    {
+        string playersText = "\n";
+        int i = 1;
+        foreach (Player player in votedPlayers)
+        {
+            playersText += player.Number + (i == votedPlayers.Count ? ". " : ", ");
+            i++;
+        }
+        playersText += "\n";
+        headText.text = Translator.Message(Messages.DOP_SPEAK_OFFICIAL1) + playersText + " " + Translator.Message(Messages.DOP_SPEAK_OFFICIAL2);
     }
 
     private void OnTimerEnd()

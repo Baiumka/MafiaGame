@@ -23,6 +23,9 @@ public class Controller : MonoBehaviour
     public PlayerHandler onPlayerVotedTurn;
     public VoteOfficialHandler onVoteOfficial;
     public IntHandler onVotesChanged;
+    public VoteOfficialHandler onDopSpeakOfficial;
+    public VoteOfficialHandler onDopVoteOfficial;
+    public PlayerHandler onDopSpeakStarted;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -58,10 +61,12 @@ public class Controller : MonoBehaviour
             gameManager.onVoteOfficial += VoteOfficial;
             gameManager.onPlayerVotedTurn += VotedTurn;
             gameManager.onVotesChanged += UpdateVotes;
+            gameManager.onDopSpeakOfficial += DopSpeakOfficial;
+            gameManager.onDopSpeakStarted += DopSpeakStarted;
+            gameManager.onDopVoteOfficial += DopVoteOfficial;
         }
     }
 
-    
 
     public void ResetTime()
     {
@@ -224,6 +229,20 @@ public class Controller : MonoBehaviour
     private void VoteOfficial(List<Player> votedPlayers)
     {
         onVoteOfficial?.Invoke(votedPlayers);
+    }
+    private void DopVoteOfficial(List<Player> votedPlayers)
+    {
+        onDopVoteOfficial?.Invoke(votedPlayers);
+    }
+
+    private void DopSpeakStarted(Player player)
+    {
+        onDopSpeakStarted?.Invoke(player);
+    }
+
+    private void DopSpeakOfficial(List<Player> votedPlayers)
+    {
+        onDopSpeakOfficial?.Invoke(votedPlayers);
     }
     #endregion
 }

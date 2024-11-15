@@ -34,9 +34,29 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onVoteOfficial += VoteOfficial;
         Controller.singlton.onPlayerVotedTurn += VoteTurn;
         Controller.singlton.onVotesChanged += UpdateVotes;
-
+        Controller.singlton.onDopSpeakOfficial += DopSpeakOfficial;
+        Controller.singlton.onDopSpeakStarted += DopSpeakStart;
+        Controller.singlton.onDopVoteOfficial += DopVoteOfficial;
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
+    }
+
+    private void DopVoteOfficial(List<Player> votedPlayers)
+    {
+        ChangeState(GameState.DOP_VOTE_OFFICIAL);
+        timerPanel.DopVoteOfficial(votedPlayers);
+    }
+
+    private void DopSpeakStart(Player player)
+    {
+        ChangeState(GameState.DOP_SPEAK);
+        ChangeSpeaker(player);
+    }
+
+    private void DopSpeakOfficial(List<Player> votedPlayers)
+    {
+        ChangeState(GameState.DOP_SPEAK);
+        timerPanel.DopSpeakOfficial(votedPlayers);
     }
 
     private void UpdateVotes(int i)
@@ -78,6 +98,9 @@ public class GameWindow : MonoBehaviour
         visibleGameState = gameState;
         switch(visibleGameState)
         {
+            case GameState.DOP_SPEAK:
+                dayText.text = Translator.Message(Messages.CROSSFIRE);
+                break;
             case GameState.VOTE:
                 dayText.text = Translator.Message(Messages.COURT);
                 foreach (PlayerObject po in playersList)
