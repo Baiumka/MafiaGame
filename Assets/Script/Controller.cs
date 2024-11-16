@@ -220,6 +220,14 @@ public class Controller : MonoBehaviour
         else if (gameManager.GameState == GameState.BOSS)
         {
             DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.BOSS_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            () => gameManager.SherifCheckPlayer(player),
+            null
+            );
+        }
+        else if (gameManager.GameState == GameState.SHERIF)
+        {
+            DialogWindow.dialog.ShowDialog(
             Translator.Message(Messages.SHERIF_CONFIRM) + player.Number + ". " + player.People.Nickname,
             () => gameManager.SherifCheckPlayer(player),
             null

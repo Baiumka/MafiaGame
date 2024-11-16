@@ -46,7 +46,19 @@ public class Game
         return true;
     }
 
-    public Player GetPlayerByNumber(int n)
+    public Player GetNextPlayer(Player player)
+    {
+        if (player == null) return Players[0];
+        Player nextPlayer = player;
+
+        while (nextPlayer.IsDead || nextPlayer == player)
+        {            
+            nextPlayer = players.Where(p => (p.Number == nextPlayer.Number + 1 || (p.Number == 1 && nextPlayer.Number == Players.Count))).First();
+        }
+        return nextPlayer;       
+    }
+
+        public Player GetPlayerByNumber(int n)
     {
         Player answer = null;
         int i = 0;

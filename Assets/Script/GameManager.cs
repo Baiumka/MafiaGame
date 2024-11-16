@@ -27,6 +27,7 @@ public class GameManager
     private Player shootedPlayer;
     private Player firstKilled;
     private List<Player> bestTurn;
+    //private int firstSpeakerIndex;
 
     private GameState gameState;
     public StartGameHandler onGameStarted;
@@ -279,9 +280,12 @@ public class GameManager
                     onPlayerVotedTurn?.Invoke(votedPlayers[votePlayerIndex]);
                 }    
                 break;
+            case GameState.SHOT_LAST_WORD:
+                StandartMorning();
+                break;
             case GameState.DAY:
                 isPutted = false;
-                Player nextPlayer = currentGame.GetPlayerByNumber(speakPlayer.Number+1);
+                Player nextPlayer = currentGame.GetNextPlayer(speakPlayer);
                 if (nextPlayer == firstSpeaker)
                 {
                     timer.Stop();
@@ -302,32 +306,38 @@ public class GameManager
                     shootedPlayer = null;
                     break;
                 }
+                StandartMorning();
 
-                foreach(Player player in currentGame.Players)
-                {
-                    player.UnPut();
-                }
-                votedPlayers.Clear();
-                currentTurn++;
-                onCameNewDay?.Invoke(currentTurn);
-                speakPlayer = currentGame.GetPlayerByNumber(currentTurn);
-                firstSpeaker = speakPlayer;
-                onNewSpeaker?.Invoke(speakPlayer);
-                SetState(GameState.DAY);
-                StartTimer(60);
+
                 break;
-            case GameState.FIRST_NIGHT_SHERIF:
-                currentTurn = 1;
+            case GameState.FIRST_NIGHT_SHERIF:                
                 SetState(GameState.MORNING);
                 break;
             case GameState.FIRST_NIGHT_MAFIA:
                 SetState(GameState.FIRST_NIGHT_SHERIF);
-                StartTimer(30);
+                StartTimer(30);                
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void StandartMorning()
+    {
+        foreach (Player player in currentGame.Players)
+        {
+            player.UnPut();
+            player.RemoveBestTurn();
+        }
+        votedPlayers.Clear();
+        currentTurn++;
+        onCameNewDay?.Invoke(currentTurn);
+        speakPlayer = currentGame.GetNextPlayer(firstSpeaker);
+        firstSpeaker = speakPlayer;
+        onNewSpeaker?.Invoke(speakPlayer);
+        SetState(GameState.DAY);
+        StartTimer(60);
     }
 
     public void AddBestTurn(Player player)
@@ -341,8 +351,11 @@ public class GameManager
             }
             else
             {
-                bestTurn.Add(player);
-                player.AddBestTurn();
+                if (bestTurn.Count < 3)
+                {
+                    bestTurn.Add(player);
+                    player.AddBestTurn();
+                }
             }
             
         }
@@ -373,8 +386,8 @@ public class GameManager
         foreach (Player p in currentGame.Players)
         {
             p.UnVote();
-        }
-        onNightStarted?.Invoke();
+        }       
+        SetState(GameState.NIGHT);
     }
 
     private void GiveLastWord(Player player)
@@ -395,11 +408,6 @@ public class GameManager
         onLastWordStarted?.Invoke(player);
         StartTimer(60);
         
-    }
-
-    private void SetState(object sHOT_LAST_WORD)
-    {
-        throw new NotImplementedException();
     }
 
     public void Vote(Player player)
@@ -440,6 +448,8 @@ public class GameManager
         if(currentGame.CheckPlayer())
         //if(true)
         {
+            firstSpeaker = null;
+            currentTurn = 0;
             SetState(GameState.FIRST_NIGHT_MAFIA);            
             StartTimer(60);            
         }

@@ -37,7 +37,7 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onDopSpeakOfficial += DopSpeakOfficial;
         Controller.singlton.onDopSpeakStarted += DopSpeakStart;
         Controller.singlton.onDopVoteOfficial += DopVoteOfficial;
-        Controller.singlton.onNightStarted += StartNight;
+       // Controller.singlton.onNightStarted += StartNight;
         Controller.singlton.onLastWordStarted += LastWord;
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
@@ -48,11 +48,7 @@ public class GameWindow : MonoBehaviour
         timerPanel.LastWord(player);
     }
 
-    private void StartNight()
-    {
-        dayText.text = Translator.Message(Messages.NIGHT);
-        timerPanel.StartNight();
-    }
+  
 
     private void DopVoteOfficial(List<Player> votedPlayers)
     {
@@ -121,6 +117,10 @@ public class GameWindow : MonoBehaviour
                 timerPanel.SetState(visibleGameState);                
                 break;
             case GameState.SHOOTING:
+                timerPanel.SetState(visibleGameState);
+                break;
+            case GameState.NIGHT:
+                dayText.text = Translator.Message(Messages.NIGHT);
                 timerPanel.SetState(visibleGameState);
                 break;
             case GameState.VOTE_FOR_UP:

@@ -93,11 +93,6 @@ public class TimerPanel : MonoBehaviour
         VoteOfficial(votedPlayers);
     }
 
-    public void StartNight()
-    {
-        Clean();
-        headText.text = Translator.Message(Messages.START_NIGHT);
-    }
 
     public void VoteOfficial(List<Player> votedPlayers)
     {
@@ -174,6 +169,10 @@ public class TimerPanel : MonoBehaviour
                 headText.text = Translator.Message(Messages.MAFIA_SHOOTING);
                 timerTicks = 0;
                 timer.Start();
+                break;
+            case GameState.NIGHT:
+                Clean();
+                headText.text = Translator.Message(Messages.START_NIGHT);
                 break;
             case GameState.FIRST_NIGHT_MAFIA:
                 headText.text = Translator.Message(Messages.FIRST_NIGHT_MAFIA);
