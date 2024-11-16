@@ -67,7 +67,15 @@ public class TimerPanel : MonoBehaviour
 
     public void SetSpeaker(Player player)
     {
-        headText.text = Translator.Message(Messages.SPEAKER) + player.Number + " " + player.People.Nickname;
+        Clean();
+        if (player.Warn >= 3)
+        {
+            headText.text = player.Number + " " + player.People.Nickname + " " + Translator.Message(Messages.MUTED_SPEAKER);
+        }
+        else
+        {
+            headText.text = Translator.Message(Messages.SPEAKER) + player.Number + " " + player.People.Nickname;
+        }
     }
 
     public void SetVoteCount(int i)

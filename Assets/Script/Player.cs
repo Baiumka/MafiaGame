@@ -11,7 +11,7 @@ public class Player
     private bool isPutted = false;
     private Player voted;
     private bool isBestTurn;
-
+    private int warn;
 
     public VoidHandler onDataUpdated;
     public VoteHandler onPlayerPut;
@@ -19,6 +19,7 @@ public class Player
     public VoteHandler onPlayerDie;
     public VoteHandler onPreparedForDie;
     public VoteHandler onAddedToBestTurn;
+    public VoidHandler onTakeWarn;
 
     public Player(int number)
     {
@@ -33,6 +34,7 @@ public class Player
     public bool IsPutted { get => isPutted; }
     public Player Voted { get => voted; }
     public bool IsBestTurn { get => isBestTurn; }
+    public int Warn { get => warn; }
 
     public void Put()
     {
@@ -92,5 +94,11 @@ public class Player
     {
         isBestTurn = false;
         onDataUpdated?.Invoke();
+    }
+
+    internal void GiveWarn()
+    {
+        warn++;
+        onTakeWarn?.Invoke();
     }
 }

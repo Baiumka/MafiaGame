@@ -47,6 +47,9 @@ public class Translator
         firstDict.Add(Messages.MISS_SHERIF_CHECK_CONFIRM, "Вы уверены что шериф никого не проверил?");
         firstDict.Add(Messages.BEST_TURN, "У убитого игрока есть 20 секунд на лучший ход.");
         firstDict.Add(Messages.MAFIA_SHOOTING, "Мафия поднимает своё оружие и проходит мимо дома №.....");
+        firstDict.Add(Messages.WARN_CONFIRM, "Вы уверены что хотите выдать предупреждение?");
+        firstDict.Add(Messages.KICK_CONFIRM, "Вы уверены что хотите выгнать игрока?");
+        firstDict.Add(Messages.MUTED_SPEAKER, ", вы не можете говорить, у вас 3 фола. Вы выставляете кого-нибудь на голосование?");
     }
 
     public static string Message(Messages message)

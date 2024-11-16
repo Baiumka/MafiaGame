@@ -41,4 +41,7 @@ public enum Messages
     MISS_SHERIF_CHECK_CONFIRM,
     SHERIF_CONFIRM,
     BEST_TURN,
+    WARN_CONFIRM,
+    KICK_CONFIRM,
+    MUTED_SPEAKER,
 }

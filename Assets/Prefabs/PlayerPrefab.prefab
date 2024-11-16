@@ -186,7 +186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: X
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -354,9 +354,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.9150943, g: 0.58272517, b: 0.58272517, a: 1}
+    m_PressedColor: {r: 0.5377358, g: 0.37793696, b: 0.37793696, a: 1}
+    m_SelectedColor: {r: 0.9245283, g: 0.4753471, b: 0.4753471, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -577,7 +577,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: '!
+
+    0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -803,8 +805,8 @@ RectTransform:
   - {fileID: 2972277710482432210}
   - {fileID: 7798892540926012319}
   - {fileID: 4139276180338961901}
-  - {fileID: 9031913683768601867}
   - {fileID: 6955357269888458032}
+  - {fileID: 9031913683768601867}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -894,6 +896,8 @@ MonoBehaviour:
   nicknameButton: {fileID: 4684729593842991305}
   roleButton: {fileID: 7637701525375012163}
   voteButton: {fileID: 6893911053526973873}
+  kickButton: {fileID: 1660075056737484747}
+  warnButton: {fileID: 7968401223693550217}
 --- !u!1 &4373915388949939303
 GameObject:
   m_ObjectHideFlags: 0

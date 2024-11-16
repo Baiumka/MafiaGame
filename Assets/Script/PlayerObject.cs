@@ -13,6 +13,8 @@ public class PlayerObject : MonoBehaviour
     [SerializeField] Button nicknameButton;
     [SerializeField] Button roleButton;    
     [SerializeField] Button voteButton;    
+    [SerializeField] Button kickButton;    
+    [SerializeField] Button warnButton;    
     public RoleContextHandler onRoleClicked;
     private Player playerInfo;
 
@@ -22,9 +24,21 @@ public class PlayerObject : MonoBehaviour
         nicknameButton.onClick.AddListener(onNickNameClicked);
         roleButton.onClick.AddListener(onRoleButtonClicked);
         voteButton.onClick.AddListener(onVoteButtonClicked);
+        kickButton.onClick.AddListener(KickButtonClicked);
+        warnButton.onClick.AddListener(WarnButtonClicked);
         
 
         voteButton.gameObject.SetActive(false);
+    }
+
+    private void WarnButtonClicked()
+    {
+        Controller.singlton.WarnPlayer(playerInfo);
+    }
+
+    private void KickButtonClicked()
+    {
+        Controller.singlton.KickPlayer(playerInfo);
     }
 
     private void onVoteButtonClicked()
@@ -51,7 +65,17 @@ public class PlayerObject : MonoBehaviour
         this.playerInfo.onPlayerDie += Die;        
         this.playerInfo.onPreparedForDie += PrepareDie;        
         this.playerInfo.onAddedToBestTurn += VotePlayer;        
+        this.playerInfo.onTakeWarn += WarnUpdate;        
         RedrawPlayer();
+    }
+
+    private void WarnUpdate()
+    {
+        warnButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "!\n" + playerInfo.Warn;
+        if(playerInfo.Warn >= 3)
+        {
+            warnButton.GetComponent<Image>().color = Color.red;
+        }
     }
 
     private void PrepareDie()

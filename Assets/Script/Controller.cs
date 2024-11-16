@@ -32,6 +32,7 @@ public class Controller : MonoBehaviour
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
 
+
     public int MaxPlayerCount { get => gameManager.MaxPlayerCount; }
 
     private void Awake()
@@ -78,6 +79,24 @@ public class Controller : MonoBehaviour
         }
     }
 
+    internal void WarnPlayer(Player playerInfo)
+    {
+        DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.WARN_CONFIRM),
+            () => gameManager.WarnPlayer(playerInfo),
+            null
+            );
+    }
+
+    internal void KickPlayer(Player playerInfo)
+    {
+        DialogWindow.dialog.ShowDialog(
+            Translator.Message(Messages.KICK_CONFIRM),
+            () => gameManager.KickPlayer(playerInfo),
+            null
+            );
+    }
+
     private void Start()
     {
         if(gameManager == null)
@@ -122,6 +141,8 @@ public class Controller : MonoBehaviour
             ReturnBack();            
         }
     }
+
+
 
     private void ReturnBack()
     {

@@ -74,6 +74,21 @@ public class GameManager
         
     }
 
+    internal void WarnPlayer(Player player)
+    {
+        player.GiveWarn();
+        if(player.Warn >= 4)
+        {
+            KickPlayer(player);        
+        }
+    }
+
+    internal void KickPlayer(Player player)
+    {
+        player.Die();
+    }
+
+
     public void CreateGame(int playerCount)
     {
         if(currentGame == null)
@@ -87,6 +102,8 @@ public class GameManager
             onGameManagerGotError?.Invoke(Translator.Message(Messages.GAME_ALREADY_STARTED));
         }
     }
+
+   
 
     private List<Player> CountVoted()
     {
@@ -290,12 +307,20 @@ public class GameManager
                 {
                     timer.Stop();
                     SetState(GameState.VOTE_OFFIACIAL);
-                    onVoteOfficial?.Invoke(votedPlayers);                    
+                    onVoteOfficial?.Invoke(votedPlayers);
                 }
                 else
                 {
                     speakPlayer = nextPlayer;
-                    StartTimer(60);
+                    if (speakPlayer.Warn >= 3)
+                    {
+                        timer.Stop();
+                    }
+                    else
+                    {
+                        StartTimer(60);
+                        
+                    }
                     onNewSpeaker?.Invoke(speakPlayer);
                 }
                 break;
