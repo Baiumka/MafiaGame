@@ -39,8 +39,26 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onDopVoteOfficial += DopVoteOfficial;
        // Controller.singlton.onNightStarted += StartNight;
         Controller.singlton.onLastWordStarted += LastWord;
+        Controller.singlton.onMafiaWin += MafiaWin;
+        Controller.singlton.onCitizenWin += CitizenWin;
+        Controller.singlton.onNoWin += NoWin;
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
+    }
+
+    private void NoWin(List<Player> players)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void CitizenWin(List<Player> players)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void MafiaWin(List<Player> players)
+    {
+        throw new NotImplementedException();
     }
 
     private void LastWord(Player player)

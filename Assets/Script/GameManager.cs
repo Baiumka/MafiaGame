@@ -9,6 +9,7 @@ public delegate void LeftSecondsHandler(int now, int final);
 public delegate void DayHandler(int dayNumber);
 public delegate void PlayerHandler(Player player);
 public delegate void VoteOfficialHandler(List<Player> votedPlayers);
+public delegate void EndGameHandler(List<Player> players);
 public delegate void IntHandler(int i);
 public class GameManager 
 {
@@ -44,6 +45,9 @@ public class GameManager
     public PlayerHandler onDopSpeakStarted;
     public PlayerHandler onLastWordStarted;
     public VoidHandler onNightStarted;
+    public EndGameHandler onMafiaWin;
+    public EndGameHandler onCitizenWin;
+    public EndGameHandler onNoWin;
     public GameState GameState { get => gameState; }
     public int MaxPlayerCount { get => currentGame.Players.Count; }
 
@@ -86,6 +90,7 @@ public class GameManager
     internal void KickPlayer(Player player)
     {
         player.Die();
+        CheckWinner();
     }
 
 
@@ -103,6 +108,27 @@ public class GameManager
         }
     }
 
+    private void CheckWinner()
+    {
+        if(currentGame.Mafia >= currentGame.Citizens && currentGame.Mafia > 0)
+        {
+            onMafiaWin?.Invoke(currentGame.Players);            
+        }
+
+        if(currentGame.Mafia == 0)
+        {
+            if(currentGame.Citizens >= 0)
+            {
+                onCitizenWin?.Invoke(currentGame.Players);
+            }
+            else
+            {
+                onNoWin?.Invoke(currentGame.Players);
+            }            
+        }
+        SetState(GameState.CLOSING);
+        timer.Stop();
+    }
    
 
     private List<Player> CountVoted()
@@ -185,10 +211,12 @@ public class GameManager
                 }
                 else
                 {
+                    CheckWinner();
                     StartNight();
                 }
                 break;
             case GameState.VOTE_LAST_WORD:
+                CheckWinner();
                 StartNight();
                 break;
             case GameState.VOTE_FOR_UP:
@@ -298,6 +326,7 @@ public class GameManager
                 }    
                 break;
             case GameState.SHOT_LAST_WORD:
+                CheckWinner();
                 StandartMorning();
                 break;
             case GameState.DAY:
@@ -473,6 +502,15 @@ public class GameManager
         if(currentGame.CheckPlayer())
         //if(true)
         {
+            currentTurn = 0;
+            isPutted = false;
+            votedPlayers = new List<Player>();
+            voteResult = null;
+            votePlayerIndex = 0;
+            dopSpkeakIndex = 0;
+            shootedPlayer = null;
+            firstKilled = null;
+            bestTurn = null;
             firstSpeaker = null;
             currentTurn = 0;
             SetState(GameState.FIRST_NIGHT_MAFIA);            

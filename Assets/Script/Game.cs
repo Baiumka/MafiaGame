@@ -58,7 +58,7 @@ public class Game
         return nextPlayer;       
     }
 
-        public Player GetPlayerByNumber(int n)
+    public Player GetPlayerByNumber(int n)
     {
         Player answer = null;
         int i = 0;
