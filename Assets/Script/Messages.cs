@@ -44,4 +44,7 @@ public enum Messages
     WARN_CONFIRM,
     KICK_CONFIRM,
     MUTED_SPEAKER,
+    MAFIA_WIN,
+    CITIZEN_WIN,
+    NO_WIN,
 }

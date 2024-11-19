@@ -6,6 +6,7 @@ using UnityEngine;
 public class InterfaceManager : MonoBehaviour
 {
     [SerializeField] GameWindow gameWindow;
+    [SerializeField] FinalWindow finalWindow;
     [SerializeField] StartWindow startWindow;
     [SerializeField] SelectPlayerWindow selectPlayerWindow;
     //[SerializeField] DialogWindow dialog;
@@ -16,7 +17,29 @@ public class InterfaceManager : MonoBehaviour
         Controller.singlton.onWantedPlayerList += ShowSelectPlayer;
         Controller.singlton.onWantedGameWindow += ShowGameWindow;
         Controller.singlton.onWantedStartWidnow += ShowStartWindow;
+
+        Controller.singlton.onMafiaWin += MafiaWin;
+        Controller.singlton.onCitizenWin += CitizenWin;
+        Controller.singlton.onNoWin += NoWin;
         InitOrder();
+    }
+
+    private void NoWin(Game game)
+    {
+        finalWindow.DrawNoWin(game);
+        ShowWindow(finalWindow);
+    }
+
+    private void CitizenWin(Game game)
+    {
+        finalWindow.DrawCitizenWin(game);
+        ShowWindow(finalWindow);
+    }
+
+    private void MafiaWin(Game game)
+    {
+        finalWindow.DrawMafiaWin(game);
+        ShowWindow(finalWindow);
     }
 
     private void ShowGameWindow()
@@ -50,6 +73,7 @@ public class InterfaceManager : MonoBehaviour
     private void InitOrder()
     {
         gameWindow.gameObject.SetActive(false);
+        finalWindow.gameObject.SetActive(false);
         selectPlayerWindow.gameObject.SetActive(false);
         startWindow.gameObject.SetActive(true);
     }
@@ -59,6 +83,7 @@ public class InterfaceManager : MonoBehaviour
         gameWindow.gameObject.SetActive(false);
         selectPlayerWindow.gameObject.SetActive(false);
         startWindow.gameObject.SetActive(false);
+        finalWindow.gameObject.SetActive(false);
 
         window.gameObject.SetActive(true);
     }

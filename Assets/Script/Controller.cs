@@ -10,7 +10,7 @@ public class Controller : MonoBehaviour
 
     private GameManager gameManager;
     
-    public StartGameHandler onGameStarted;
+    public GameHandler onGameStarted;
     public ErrorHandler onError;
     public VoidHandler onWantedPlayerList;
     public VoidHandler onWantedStartWidnow;
@@ -28,9 +28,9 @@ public class Controller : MonoBehaviour
     public PlayerHandler onDopSpeakStarted;
     public PlayerHandler onLastWordStarted;
     public VoidHandler onNightStarted;
-    public EndGameHandler onMafiaWin;
-    public EndGameHandler onCitizenWin;
-    public EndGameHandler onNoWin;
+    public GameHandler onMafiaWin;
+    public GameHandler onCitizenWin;
+    public GameHandler onNoWin;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -285,19 +285,19 @@ public class Controller : MonoBehaviour
 
     #region Events Duplicates
 
-    private void NoWin(List<Player> players)
+    private void NoWin(Game game)
     {
-        onMafiaWin?.Invoke(players);
+        onMafiaWin?.Invoke(game);
     }
 
-    private void CitizenWin(List<Player> players)
+    private void CitizenWin(Game game)
     {
-        onCitizenWin?.Invoke(players);
+        onCitizenWin?.Invoke(game);
     }
 
-    private void MafiaWin(List<Player> players)
+    private void MafiaWin(Game game)
     {
-        onNoWin?.Invoke(players);
+        onNoWin?.Invoke(game);
     }
     private void StartLastWord(Player player)
     {

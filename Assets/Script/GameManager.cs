@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Timers;
 
-public delegate void StartGameHandler(Game newGame); 
+public delegate void GameHandler(Game newGame); 
 public delegate void ErrorHandler(string errorText);
 public delegate void GameStateHandler(GameState gameState);
 public delegate void LeftSecondsHandler(int now, int final);
 public delegate void DayHandler(int dayNumber);
 public delegate void PlayerHandler(Player player);
 public delegate void VoteOfficialHandler(List<Player> votedPlayers);
-public delegate void EndGameHandler(List<Player> players);
 public delegate void IntHandler(int i);
 public class GameManager 
 {
@@ -31,7 +30,7 @@ public class GameManager
     //private int firstSpeakerIndex;
 
     private GameState gameState;
-    public StartGameHandler onGameStarted;
+    public GameHandler onGameStarted;
     public ErrorHandler onGameManagerGotError;
     public GameStateHandler onGameStateChanged;
     public LeftSecondsHandler onTimerTicked;
@@ -45,9 +44,9 @@ public class GameManager
     public PlayerHandler onDopSpeakStarted;
     public PlayerHandler onLastWordStarted;
     public VoidHandler onNightStarted;
-    public EndGameHandler onMafiaWin;
-    public EndGameHandler onCitizenWin;
-    public EndGameHandler onNoWin;
+    public GameHandler onMafiaWin;
+    public GameHandler onCitizenWin;
+    public GameHandler onNoWin;
     public GameState GameState { get => gameState; }
     public int MaxPlayerCount { get => currentGame.Players.Count; }
 
@@ -112,18 +111,18 @@ public class GameManager
     {
         if(currentGame.Mafia >= currentGame.Citizens && currentGame.Mafia > 0)
         {
-            onMafiaWin?.Invoke(currentGame.Players);            
+            onMafiaWin?.Invoke(currentGame);            
         }
 
         if(currentGame.Mafia == 0)
         {
             if(currentGame.Citizens >= 0)
             {
-                onCitizenWin?.Invoke(currentGame.Players);
+                onCitizenWin?.Invoke(currentGame);
             }
             else
             {
-                onNoWin?.Invoke(currentGame.Players);
+                onNoWin?.Invoke(currentGame);
             }            
         }
         SetState(GameState.CLOSING);
