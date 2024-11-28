@@ -9,6 +9,7 @@ public class Controller : MonoBehaviour
     public static Controller singlton;
 
     private GameManager gameManager;
+    private IDataBase database;
     
     public GameHandler onGameStarted;
     public ErrorHandler onError;
@@ -22,6 +23,8 @@ public class Controller : MonoBehaviour
     public PlayerHandler onNewSpeaker;
     public PlayerHandler onPlayerVotedTurn;
     public VoteOfficialHandler onVoteOfficial;
+
+
     public IntHandler onVotesChanged;
     public VoteOfficialHandler onDopSpeakOfficial;
     public VoteOfficialHandler onDopVoteOfficial;
@@ -49,6 +52,12 @@ public class Controller : MonoBehaviour
             Destroy(this);
         }        
     }
+
+    public void Login(string login, string password)
+    {
+        //
+    }
+
 
     public void NextState()
     {
@@ -105,6 +114,7 @@ public class Controller : MonoBehaviour
         if(gameManager == null)
         {
             gameManager = new GameManager();
+            database = new SuperDataBase();
             gameManager.onGameManagerGotError += ShowError;
             gameManager.onGameStarted += StartGame;
             gameManager.onTimerTicked += TickTimer;

@@ -1,0 +1,5 @@
+D:/UnityProjects/UnitEditor/MafiaGame/.utmp/RelWithDebInfo/1g2tu82g/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/UnityProjects/UnitEditor/MafiaGame/.utmp/RelWithDebInfo/1g2tu82g/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+D:/UnityProjects/UnitEditor/MafiaGame/.utmp/RelWithDebInfo/1g2tu82g/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+D:/UnityProjects/UnitEditor/MafiaGame/.utmp/RelWithDebInfo/1g2tu82g/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+D:/UnityProjects/UnitEditor/MafiaGame/.utmp/RelWithDebInfo/1g2tu82g/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir

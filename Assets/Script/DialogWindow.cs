@@ -24,6 +24,7 @@ public class DialogWindow : MonoBehaviour
             Destroy(this);
         }
         this.gameObject.SetActive(false);
+        
     }
 
     public void ShowDialog(string message, System.Action onYes, System.Action onNo)
