@@ -56,6 +56,7 @@ public class Controller : MonoBehaviour
     public void Login(string login, string password)
     {
         //
+        database.Test();
     }
 
 
@@ -63,7 +64,7 @@ public class Controller : MonoBehaviour
     {
         if (gameManager.GameState == GameState.SHOOTING)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.MISS_SHOOTING_CONFIRM),
             () => gameManager.NextState(),
             null
@@ -71,7 +72,7 @@ public class Controller : MonoBehaviour
         }
         else if (gameManager.GameState == GameState.BOSS)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.MISS_BOSS_CHECK_CONFIRM),
             () => gameManager.NextState(),
             null
@@ -79,7 +80,7 @@ public class Controller : MonoBehaviour
         }
         else if (gameManager.GameState == GameState.SHERIF)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.MISS_SHERIF_CHECK_CONFIRM),
             () => gameManager.NextState(),
             null
@@ -93,7 +94,7 @@ public class Controller : MonoBehaviour
 
     internal void WarnPlayer(Player playerInfo)
     {
-        DialogWindow.dialog.ShowDialog(
+        InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.WARN_CONFIRM),
             () => gameManager.WarnPlayer(playerInfo),
             null
@@ -102,7 +103,7 @@ public class Controller : MonoBehaviour
 
     internal void KickPlayer(Player playerInfo)
     {
-        DialogWindow.dialog.ShowDialog(
+        InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.KICK_CONFIRM),
             () => gameManager.KickPlayer(playerInfo),
             null
@@ -114,7 +115,7 @@ public class Controller : MonoBehaviour
         if(gameManager == null)
         {
             gameManager = new GameManager();
-            database = new SuperDataBase();
+            database = new MySQLDataBase();
             gameManager.onGameManagerGotError += ShowError;
             gameManager.onGameStarted += StartGame;
             gameManager.onTimerTicked += TickTimer;
@@ -164,9 +165,9 @@ public class Controller : MonoBehaviour
 
     private void ReturnBack()
     {
-        if(DialogWindow.dialog.IsShown)
+        if(InterfaceManager.dialog.IsShown)
         {
-            DialogWindow.dialog.CloseDialog();
+            InterfaceManager.dialog.CloseDialog();
             return;
         }
 
@@ -250,7 +251,7 @@ public class Controller : MonoBehaviour
         }
         else if (gameManager.GameState == GameState.SHOOTING)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.SHOOTING_CONFIRM) + player.Number + ". " + player.People.Nickname,
             () => gameManager.ShotPlayer(player),
             null
@@ -258,7 +259,7 @@ public class Controller : MonoBehaviour
         }
         else if (gameManager.GameState == GameState.BOSS)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.BOSS_CONFIRM) + player.Number + ". " + player.People.Nickname,
             () => gameManager.SherifCheckPlayer(player),
             null
@@ -266,7 +267,7 @@ public class Controller : MonoBehaviour
         }
         else if (gameManager.GameState == GameState.SHERIF)
         {
-            DialogWindow.dialog.ShowDialog(
+            InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.SHERIF_CONFIRM) + player.Number + ". " + player.People.Nickname,
             () => gameManager.SherifCheckPlayer(player),
             null

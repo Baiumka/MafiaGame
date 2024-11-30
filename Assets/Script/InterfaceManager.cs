@@ -9,7 +9,22 @@ public class InterfaceManager : MonoBehaviour
     [SerializeField] FinalWindow finalWindow;
     [SerializeField] StartWindow startWindow;
     [SerializeField] SelectPlayerWindow selectPlayerWindow;
-    //[SerializeField] DialogWindow dialog;
+    [SerializeField] DialogWindow dialogWindow;
+
+    public static DialogWindow dialog;
+    private void Awake()
+    {
+        if (dialog == null)
+        {
+            dialog = dialogWindow;
+        }
+        else
+        {
+            Destroy(dialog);
+        }       
+    }
+
+
     private void Start()
     {
         Controller.singlton.onError += ShowError;
@@ -76,6 +91,7 @@ public class InterfaceManager : MonoBehaviour
         finalWindow.gameObject.SetActive(false);
         selectPlayerWindow.gameObject.SetActive(false);
         startWindow.gameObject.SetActive(true);
+        dialogWindow.gameObject.SetActive(false);
     }
 
     private void ShowWindow(MonoBehaviour window)

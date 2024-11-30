@@ -10,22 +10,8 @@ public class DialogWindow : MonoBehaviour
     [SerializeField] private Button noButton;
     [SerializeField] private TMP_Text headText;
 
-    public static DialogWindow dialog;
+    
     public bool IsShown { get => gameObject.activeSelf; }
-
-    private void Awake()
-    {
-        if(dialog == null)
-        {
-            dialog = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-        this.gameObject.SetActive(false);
-        
-    }
 
     public void ShowDialog(string message, System.Action onYes, System.Action onNo)
     {

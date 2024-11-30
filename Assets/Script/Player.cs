@@ -24,7 +24,7 @@ public class Player
     public Player(int number)
     {
         this.number = number;
-        this.people = SuperDataBase.GetRandomPlayer();
+        this.people = MySQLDataBase.GetRandomPlayer();
     }
 
     public int Number { get => number;}
