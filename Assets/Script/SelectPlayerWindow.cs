@@ -18,7 +18,7 @@ public class SelectPlayerWindow : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        foreach (People people in MySQLDataBase.AvaiblePeople)
+        foreach (People people in Controller.AvaiblePeople)
         {
             GameObject newPeopleObject = GameObject.Instantiate(peopleObjectPrefab, spawnPanel);
             PeopleObject po = newPeopleObject.GetComponent<PeopleObject>();

@@ -40,6 +40,7 @@ public class Controller : MonoBehaviour
 
 
     public int MaxPlayerCount { get => gameManager.MaxPlayerCount; }
+    public static List<People> AvaiblePeople { get => singlton.database.AvaiblePeople; }
 
     private void Awake()
     {    
@@ -55,8 +56,7 @@ public class Controller : MonoBehaviour
 
     public void Login(string login, string password)
     {
-        //
-        database.Test();
+        database.Login(login, password);
     }
 
 
@@ -133,10 +133,16 @@ public class Controller : MonoBehaviour
             gameManager.onMafiaWin += MafiaWin;
             gameManager.onCitizenWin += CitizenWin;
             gameManager.onNoWin += NoWin;
+
+            database.OnUserLogin += ShowUserInfo;
+            database.OnDataBaseError += ShowError;
         }
     }
 
-
+    private void ShowUserInfo(int number)
+    {
+        ShowError(number.ToString());
+    }
 
     public void ResetTime()
     {
