@@ -69,7 +69,7 @@ public class InterfaceManager : MonoBehaviour
 
     private void ShowSelectPlayer()
     {
-        selectPlayerWindow.DrawPeople();
+        selectPlayerWindow.DrawList();
         ShowWindow(selectPlayerWindow);
     }
 

@@ -23,8 +23,6 @@ public class Controller : MonoBehaviour
     public PlayerHandler onNewSpeaker;
     public PlayerHandler onPlayerVotedTurn;
     public VoteOfficialHandler onVoteOfficial;
-
-
     public IntHandler onVotesChanged;
     public VoteOfficialHandler onDopSpeakOfficial;
     public VoteOfficialHandler onDopVoteOfficial;
@@ -34,6 +32,8 @@ public class Controller : MonoBehaviour
     public GameHandler onMafiaWin;
     public GameHandler onCitizenWin;
     public GameHandler onNoWin;
+    public UserInfoHandler onUserLogin;
+    public PeopleInfoHandler onPeopleAdded;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -136,12 +136,18 @@ public class Controller : MonoBehaviour
 
             database.OnUserLogin += ShowUserInfo;
             database.OnDataBaseError += ShowError;
+            database.OnPeopleAdded += AddPeople;
         }
+    }
+
+    private void AddPeople(People people)
+    {
+        onPeopleAdded?.Invoke(people);
     }
 
     private void ShowUserInfo(int number)
     {
-        ShowError(number.ToString());
+        onUserLogin?.Invoke(number);
     }
 
     public void ResetTime()
@@ -290,9 +296,21 @@ public class Controller : MonoBehaviour
         onWantedPlayerList?.Invoke();
     }
 
+    public void CreatePeople(string name)
+    {
+        if (name.Length < 2)
+        {
+            onError?.Invoke(Translator.Message(Messages.TOO_SHORT_NAME));
+            return;
+        }
+        database.AddPeople(name);
+    }
     public void CreateGame(int playerCount)
     {
-        gameManager.CreateGame(playerCount);
+        if (database.IsLogin)
+            gameManager.CreateGame(playerCount);
+        else
+            onError?.Invoke(Translator.Message(Messages.NO_LOGIN));
     }
 
     public void StartGame()
@@ -379,5 +397,6 @@ public class Controller : MonoBehaviour
     {
         onDopSpeakOfficial?.Invoke(votedPlayers);
     }
+    
     #endregion
 }

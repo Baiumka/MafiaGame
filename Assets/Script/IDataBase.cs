@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public delegate void UserInfoHandler(int number);
+public delegate void PeopleInfoHandler(People people);
 
 public interface IDataBase 
 {    
@@ -13,6 +14,9 @@ public interface IDataBase
 
     event UserInfoHandler OnUserLogin;
     event ErrorHandler OnDataBaseError;
+    event PeopleInfoHandler OnPeopleAdded;
+
+    public void AddPeople(string name);
     public void Login(string login, string password);
 
     

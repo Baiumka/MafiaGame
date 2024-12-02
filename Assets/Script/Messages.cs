@@ -47,4 +47,7 @@ public enum Messages
     MAFIA_WIN,
     CITIZEN_WIN,
     NO_WIN,
+    WRONG_PASSWORD,
+    NO_LOGIN,
+    TOO_SHORT_NAME,
 }
