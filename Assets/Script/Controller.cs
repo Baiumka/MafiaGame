@@ -323,16 +323,19 @@ public class Controller : MonoBehaviour
     private void NoWin(Game game)
     {
         onMafiaWin?.Invoke(game);
+        database.WriteResult(game);
     }
 
     private void CitizenWin(Game game)
     {
         onCitizenWin?.Invoke(game);
+        database.WriteResult(game);
     }
 
     private void MafiaWin(Game game)
     {
         onNoWin?.Invoke(game);
+        database.WriteResult(game);
     }
     private void StartLastWord(Player player)
     {

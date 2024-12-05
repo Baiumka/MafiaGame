@@ -50,6 +50,9 @@ public class Translator
         firstDict.Add(Messages.WARN_CONFIRM, "Вы уверены что хотите выдать предупреждение?");
         firstDict.Add(Messages.KICK_CONFIRM, "Вы уверены что хотите выгнать игрока?");
         firstDict.Add(Messages.MUTED_SPEAKER, ", вы не можете говорить, у вас 3 фола. Вы выставляете кого-нибудь на голосование?");
+        firstDict.Add(Messages.MAFIA_WIN, "Победа мафии!");
+        firstDict.Add(Messages.CITIZEN_WIN, "Победа мирных!");
+        firstDict.Add(Messages.NO_WIN, "Ничья =(");
     }
 
     public static string Message(Messages message)

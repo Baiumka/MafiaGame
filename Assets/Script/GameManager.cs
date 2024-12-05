@@ -540,8 +540,7 @@ public class GameManager
     private void StartTimer(int seconds)
     {     
         secondsTicked = 0;
-        currentTimerFinal = 3;
-        //currentTimerFinal = seconds;
+        currentTimerFinal = seconds;        
         onTimerTicked?.Invoke(secondsTicked, currentTimerFinal);
         timer.Start();
     }

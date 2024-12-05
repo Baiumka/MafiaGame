@@ -18,6 +18,5 @@ public interface IDataBase
 
     public void AddPeople(string name);
     public void Login(string login, string password);
-
-    
+    public void WriteResult(Game game);
 }

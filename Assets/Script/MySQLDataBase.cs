@@ -3,6 +3,8 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using UnityEditor.Search;
 
 public class MySQLDataBase : IDataBase 
@@ -29,7 +31,7 @@ public class MySQLDataBase : IDataBase
         }
     }
     public List<People> AvaiblePeople => peopleList;
-    public bool IsLogin => true;//Заменить на isLogin
+    public bool IsLogin => isLogin;//Заменить на isLogin
 
     public MySQLDataBase()
     {
@@ -209,6 +211,45 @@ public class MySQLDataBase : IDataBase
                 {
                     OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
                 }                
+            }
+        }
+    }
+
+    public void WriteResult(Game game)
+    {
+        if (isLogin)
+        {
+            try
+            {
+                string queryInsertGame = "INSERT INTO games (dd, dt, id_user) VALUES (@dd, @dt, @id_user); SELECT LAST_INSERT_ID();";
+                using (MySqlCommand cmdInsertGame = new MySqlCommand(queryInsertGame, Conn))
+                {
+                    cmdInsertGame.Parameters.AddWithValue("@dd", DateTime.Now.Date);
+                    cmdInsertGame.Parameters.AddWithValue("@dt", DateTime.Now.ToString());
+                    cmdInsertGame.Parameters.AddWithValue("@id_user", userID                        );
+                    int newGameId = Convert.ToInt32(cmdInsertGame.ExecuteScalar());
+                    foreach(Player p in game.Players)
+                    {
+                        string queryInsertPlayer = "INSERT INTO players (id_game, id_people, role, id_place, is_alive) VALUES (@id_game, @id_people, @role, @id_place, @is_alive);";
+                        using (MySqlCommand cmdInsertPlayer = new MySqlCommand(queryInsertPlayer, Conn))
+                        {
+                            cmdInsertPlayer.Parameters.AddWithValue("@id_game", newGameId);
+                            cmdInsertPlayer.Parameters.AddWithValue("@id_people", p.People.Id);
+                            cmdInsertPlayer.Parameters.AddWithValue("@role", p.Role.ToString());
+                            cmdInsertPlayer.Parameters.AddWithValue("@id_place", p.Number);
+                            cmdInsertPlayer.Parameters.AddWithValue("@is_alive", !p.IsDead);
+                            cmdInsertPlayer.ExecuteNonQuery();                   
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnDataBaseError?.Invoke($"Connect Error: {ex.Message}, {connection.Database}");
+                if (ex.InnerException != null)
+                {
+                    OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
+                }
             }
         }
     }
