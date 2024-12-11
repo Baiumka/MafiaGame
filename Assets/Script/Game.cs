@@ -2,25 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using static History;
 
 public class Game
 {
     private List<Player> players;
+
+    public History history;
     public int Citizens { get => players.Count(player => (player.Role == Role.CITIZEN || player.Role == Role.SHERIFF) && !player.IsDead); }
     public int Mafia { get => players.Count(player => (player.Role == Role.MAFIA || player.Role == Role.BOSS) && !player.IsDead); }
+    public Player Sherif { get => players.Where(player => (player.Role == Role.SHERIFF)).First(); }
+    public Player Boss { get => players.Where(player => (player.Role == Role.BOSS)).First(); }
     public List<Player> PuttedPlayers { get => players.Where(player => player.IsPutted && !player.IsDead).ToList(); }
     public List<Player> AlivePlayers { get => players.Where(player => !player.IsDead).ToList(); }
 
 
     public Game(int playerCount)
     {
+        history = new History();
         players = new List<Player>(playerCount);
-        for(int i = 1; i <= playerCount; i++)
+       for(int i = 1; i <= playerCount; i++)
         {
             Player newPlayer = new Player(i);
             players.Add(newPlayer);
-            if (i == 1) newPlayer.SetRole(Role.CITIZEN);
+            /* if (i == 1) newPlayer.SetRole(Role.CITIZEN);
             if (i == 2) newPlayer.SetRole(Role.CITIZEN);
             if (i == 3) newPlayer.SetRole(Role.CITIZEN);
             if (i == 4) newPlayer.SetRole(Role.CITIZEN);
@@ -29,8 +36,13 @@ public class Game
             if (i == 7) newPlayer.SetRole(Role.SHERIFF);
             if (i == 8) newPlayer.SetRole(Role.MAFIA);
             if (i == 9) newPlayer.SetRole(Role.MAFIA);
-            if (i == 10) newPlayer.SetRole(Role.BOSS);
-        }        
+            if (i == 10) newPlayer.SetRole(Role.BOSS);*/
+        }
+    }
+
+        public void Log(Player player, Player target, EventType eventType)
+    {
+        history.Add(player,target,eventType);
     }
 
     public List<Player> Players { get => players; }

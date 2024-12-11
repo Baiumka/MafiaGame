@@ -7,6 +7,8 @@ public delegate void VoidHandler();
 public class Controller : MonoBehaviour
 {
     public static Controller singlton;
+    [SerializeField] private InterfaceManager interfaceManager;
+    [SerializeField] private VisualManager visualManager;
 
     private GameManager gameManager;
     private IDataBase database;
@@ -138,6 +140,10 @@ public class Controller : MonoBehaviour
             database.OnDataBaseError += ShowError;
             database.OnPeopleAdded += AddPeople;
         }
+        interfaceManager.Init();
+        visualManager.Init();
+
+
     }
 
     private void AddPeople(People people)
@@ -145,9 +151,9 @@ public class Controller : MonoBehaviour
         onPeopleAdded?.Invoke(people);
     }
 
-    private void ShowUserInfo(int number)
+    private void ShowUserInfo(int number, string name)
     {
-        onUserLogin?.Invoke(number);
+        onUserLogin?.Invoke(number, name);
     }
 
     public void ResetTime()
@@ -273,7 +279,7 @@ public class Controller : MonoBehaviour
         {
             InterfaceManager.dialog.ShowDialog(
             Translator.Message(Messages.BOSS_CONFIRM) + player.Number + ". " + player.People.Nickname,
-            () => gameManager.SherifCheckPlayer(player),
+            () => gameManager.BossCheckPlayer(player),
             null
             );
         }
@@ -322,7 +328,7 @@ public class Controller : MonoBehaviour
 
     private void NoWin(Game game)
     {
-        onMafiaWin?.Invoke(game);
+        onNoWin?.Invoke(game);
         database.WriteResult(game);
     }
 
@@ -334,7 +340,7 @@ public class Controller : MonoBehaviour
 
     private void MafiaWin(Game game)
     {
-        onNoWin?.Invoke(game);
+        onMafiaWin?.Invoke(game);
         database.WriteResult(game);
     }
     private void StartLastWord(Player player)
@@ -400,6 +406,11 @@ public class Controller : MonoBehaviour
     {
         onDopSpeakOfficial?.Invoke(votedPlayers);
     }
-    
+
+    internal void Register(string text1, string text2, string text3)
+    {
+        onError?.Invoke("Регистрация недоступна");
+    }
+
     #endregion
 }

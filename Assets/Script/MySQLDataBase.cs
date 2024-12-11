@@ -43,7 +43,7 @@ public class MySQLDataBase : IDataBase
         try
         {
             string query = "SELECT id, name FROM people WHERE id_user = " + userID;
-            OnDataBaseError?.Invoke(query);             
+            //OnDataBaseError?.Invoke(query);             
             using (MySqlCommand cmd = new MySqlCommand(query, Conn))
             {
                 using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -53,7 +53,7 @@ public class MySQLDataBase : IDataBase
                         // Читаем данные из таблицы
                         int id = reader.GetInt32("id");
                         string name = reader.GetString("name");
-                        OnDataBaseError?.Invoke(name);
+                        //OnDataBaseError?.Invoke(name);
                         peopleList.Add(new People(id, name));
                     }
                 }
@@ -75,6 +75,40 @@ public class MySQLDataBase : IDataBase
         {
             connection = new MySqlConnection(CONNECTION_STRING);
             connection.Open();
+
+            /*string queryInsertPlayer = "DELETE FROM people";
+            using (MySqlCommand cmdInsertPlayer = new MySqlCommand(queryInsertPlayer, connection))
+            {
+                cmdInsertPlayer.ExecuteNonQuery();
+            }
+            List<string> names = new List<string>();
+            names.Add("Баюмка");
+            names.Add("Tarahtienko");
+            names.Add("DenSizzz");
+            names.Add("Катя");
+            names.Add("AnnaTolivna");
+            names.Add("jwbaelis");
+            names.Add("vilegecko");
+            names.Add("knyaz_170");
+            names.Add("Dari4ka7");
+            names.Add("baiumka");
+            names.Add("mykhailus");
+            names.Add("Poiut_91");
+            names.Add("black_valkyrie28");
+            names.Add("Пустой слот");
+
+            foreach (string name in names)
+            {
+                queryInsertPlayer = "INSERT INTO people (id_user, reg_date, name) VALUES (@id_user, @reg_date, @name);";
+                using (MySqlCommand cmdInsertPlayer = new MySqlCommand(queryInsertPlayer, connection))
+                {
+                    cmdInsertPlayer.Parameters.AddWithValue("@id_user", 1);
+                    cmdInsertPlayer.Parameters.AddWithValue("@reg_date", DateTime.Now.Date);
+                    cmdInsertPlayer.Parameters.AddWithValue("@name", name);
+                    cmdInsertPlayer.ExecuteNonQuery();
+                }
+            }*/
+
             return connection;
         }
         catch (Exception ex)
@@ -88,49 +122,18 @@ public class MySQLDataBase : IDataBase
         }
     }
 
-    private void SuccssesLogin(int id, int userNumber)
+    private void SuccssesLogin(int id, int userNumber, string name)
     {        
-        OnUserLogin?.Invoke(userNumber);
+        OnUserLogin?.Invoke(userNumber, name);
         userID = id;
         LoadPeopleList();
         isLogin = true;
     }
 
-    public void Login(string login, string password)
+    public void Register(string login, string password, string name)
     {
         try
         {
-            // Проверяем, существует ли пользователь с таким логином
-            string queryCheckUser = "SELECT number, password,id FROM users WHERE login = @login";
-            using (MySqlCommand cmdCheckUser = new MySqlCommand(queryCheckUser, Conn))
-            {
-                cmdCheckUser.Parameters.AddWithValue("@login", login);
-                int userNumber = 0;
-                int id = 0;
-                using (MySqlDataReader reader = cmdCheckUser.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        // Пользователь найден, проверяем пароль
-                        string storedPassword = reader.GetString("password");                        
-                        if (storedPassword == password)
-                        {
-                            userNumber = reader.GetInt32("number");
-                            id = reader.GetInt32("id");                            
-                        }
-                        else
-                        {
-                            OnDataBaseError?.Invoke(Translator.Message(Messages.WRONG_PASSWORD)); ;
-                        }
-                    }
-                }
-                if(userNumber != 0 && id != 0) 
-                {
-                    SuccssesLogin(id, userNumber);
-                    return;
-                }
-            }
-
             // Пользователь не найден, создаем нового
             string queryGetMaxNumber = "SELECT MAX(number) FROM users";
             int newNumber = 1;
@@ -145,16 +148,67 @@ public class MySQLDataBase : IDataBase
             }
 
             // Добавляем нового пользователя
-            string queryInsertUser = "INSERT INTO users (number, login, password) VALUES (@number, @login, @password); SELECT LAST_INSERT_ID();";
+            string queryInsertUser = "INSERT INTO users (number, login, password, name) VALUES (@number, @login, @password, @name); SELECT LAST_INSERT_ID();";
             using (MySqlCommand cmdInsertUser = new MySqlCommand(queryInsertUser, Conn))
             {
                 cmdInsertUser.Parameters.AddWithValue("@number", newNumber);
                 cmdInsertUser.Parameters.AddWithValue("@login", login);
                 cmdInsertUser.Parameters.AddWithValue("@password", password);
+                cmdInsertUser.Parameters.AddWithValue("@name", name);
 
                 int newId = Convert.ToInt32(cmdInsertUser.ExecuteScalar());
-                SuccssesLogin(newId, newNumber);
+                //SuccssesLogin(newId, newNumber);
             }
+        }
+        catch (Exception ex)
+        {
+            // Обработка ошибок
+            OnDataBaseError?.Invoke($"Login error: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
+            }
+        }
+    }
+
+    public void Login(string login, string password)
+    {
+        try
+        {
+            // Проверяем, существует ли пользователь с таким логином
+            string queryCheckUser = "SELECT number, password,id,name FROM users WHERE login = @login";
+            using (MySqlCommand cmdCheckUser = new MySqlCommand(queryCheckUser, Conn))
+            {
+                cmdCheckUser.Parameters.AddWithValue("@login", login);
+                int userNumber = 0;
+                int id = 0;
+                string name = "";
+                using (MySqlDataReader reader = cmdCheckUser.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        // Пользователь найден, проверяем пароль
+                        string storedPassword = reader.GetString("password");                        
+                        if (storedPassword == password)
+                        {
+                            userNumber = reader.GetInt32("number");
+                            id = reader.GetInt32("id");                            
+                            name = reader.GetString("name");                            
+                        }
+                        else
+                        {
+                            OnDataBaseError?.Invoke(Translator.Message(Messages.WRONG_PASSWORD)); ;
+                        }
+                    }
+                }
+                if(userNumber != 0 && id != 0) 
+                {
+                    SuccssesLogin(id, userNumber, name);
+                    return;
+                }
+            }
+
+          
         }
         catch (Exception ex)
         {
@@ -241,6 +295,25 @@ public class MySQLDataBase : IDataBase
                             cmdInsertPlayer.ExecuteNonQuery();                   
                         }
                     }
+                    foreach(History.HistoryEvent eve in game.history.Events)
+                    {
+                        string queryInsertHistory = "INSERT INTO history (game, player, target, event_type, dd, dt) VALUES (@game, @player, @target, @event_type, @dd, @dt);";
+                        using (MySqlCommand cmdInsertHistory = new MySqlCommand(queryInsertHistory, Conn))
+                        {
+                            cmdInsertHistory.Parameters.AddWithValue("@game", newGameId);
+
+                            if(eve.player == null ) cmdInsertHistory.Parameters.AddWithValue("@player", 0);
+                            else cmdInsertHistory.Parameters.AddWithValue("@player", eve.player.Number);
+
+                            if (eve.target == null) cmdInsertHistory.Parameters.AddWithValue("@target", 0);
+                            else cmdInsertHistory.Parameters.AddWithValue("@target", eve.target.Number);
+
+                            cmdInsertHistory.Parameters.AddWithValue("@event_type", eve.type.ToString());
+                            cmdInsertHistory.Parameters.AddWithValue("@dd", eve.dateTime.Date);
+                            cmdInsertHistory.Parameters.AddWithValue("@dt", eve.dateTime.ToString());
+                            cmdInsertHistory.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -253,4 +326,6 @@ public class MySQLDataBase : IDataBase
             }
         }
     }
+
+  
 }

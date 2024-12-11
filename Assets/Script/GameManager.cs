@@ -72,7 +72,7 @@ public class GameManager
         }
         voted.Put();
         votedPlayers.Add(voted);
-        History.Add(speakPlayer, voted);
+        currentGame.Log(speakPlayer,voted,EventType.PUT);
         isPutted = true;
         
     }
@@ -80,8 +80,10 @@ public class GameManager
     internal void WarnPlayer(Player player)
     {
         player.GiveWarn();
-        if(player.Warn >= 4)
+        currentGame.Log(null, player, EventType.WARN);
+        if (player.Warn >= 4)
         {
+            currentGame.Log(null, player, EventType.WARN_EXIT);
             KickPlayer(player);        
         }
     }
@@ -122,6 +124,7 @@ public class GameManager
             }
             else
             {
+                //onGameManagerGotError?.Invoke("Мафия: " + currentGame.Mafia + " Alive: " + currentGame.Citizens);
                 onNoWin?.Invoke(currentGame);
             }            
         }
@@ -408,6 +411,7 @@ public class GameManager
                 {
                     bestTurn.Add(player);
                     player.AddBestTurn();
+                    currentGame.Log(firstKilled, player, EventType.BEST_TURN);
                 }
             }
             
@@ -416,13 +420,16 @@ public class GameManager
 
     public void SherifCheckPlayer(Player player)
     {
+        currentGame.Log(currentGame.Sherif, player, EventType.SHERIF_CHECK);
         NextState();
         //Добавляем лог
+        
     }
 
     public void BossCheckPlayer(Player player)
     {
-        
+        currentGame.Log(currentGame.Boss, player, EventType.BOSS_CHECK);
+        NextState();
         //Добавляем лог
     }
 
@@ -430,6 +437,7 @@ public class GameManager
     {
         NextState();
         shootedPlayer = player;
+        currentGame.Log(null, player, EventType.KILL);
         player.PrepareForDie();
         //Добавляем лог
     }

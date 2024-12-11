@@ -24,8 +24,7 @@ public class InterfaceManager : MonoBehaviour
         }       
     }
 
-
-    private void Start()
+    public void Init()//Вместо Start()
     {
         Controller.singlton.onError += ShowError;
         Controller.singlton.onGameStarted += StartGame;
@@ -37,6 +36,7 @@ public class InterfaceManager : MonoBehaviour
         Controller.singlton.onCitizenWin += CitizenWin;
         Controller.singlton.onNoWin += NoWin;
         InitOrder();
+        startWindow.Init();
     }
 
     private void NoWin(Game game)
@@ -82,6 +82,11 @@ public class InterfaceManager : MonoBehaviour
 
     private void ShowError(string errorText)
     {
+        dialog.ShowDialog(
+            errorText,
+            null,
+            null
+            );
         Debug.Log(errorText);
     }
 
@@ -103,4 +108,6 @@ public class InterfaceManager : MonoBehaviour
 
         window.gameObject.SetActive(true);
     }
+
+
 }

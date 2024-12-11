@@ -121,9 +121,13 @@ public class GameWindow : MonoBehaviour
                 timerPanel.SetState(visibleGameState);                
                 break;
             case GameState.SHOOTING:
+                foreach (PlayerObject po in playersList)
+                {
+                    po.ShowRole();
+                }
                 timerPanel.SetState(visibleGameState);
                 break;
-            case GameState.NIGHT:
+            case GameState.NIGHT:                
                 dayText.text = Translator.Message(Messages.NIGHT);
                 timerPanel.SetState(visibleGameState);
                 break;
@@ -156,6 +160,10 @@ public class GameWindow : MonoBehaviour
                 }
                 break;
             case GameState.MORNING:
+                foreach (PlayerObject po in playersList)
+                {
+                    po.HideRole();
+                }
                 dayText.SetText(Translator.Message(Messages.MORNING));
                 timerPanel.Clean();
                 break;
