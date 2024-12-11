@@ -3,9 +3,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using UnityEditor.Search;
+
 
 public class MySQLDataBase : IDataBase 
 {
@@ -113,11 +111,13 @@ public class MySQLDataBase : IDataBase
         }
         catch (Exception ex)
         {
-            OnDataBaseError?.Invoke($"Connect Error: {ex.Message}, {connection.Database}");
+            string text = "";
+            text += $"Connect Error: {ex.Message}, {connection.Database}\n";
             if (ex.InnerException != null)
             {
-                OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
+                text += $"Inner Error: {ex.InnerException.Message}";
             }
+            OnDataBaseError.Invoke(text);
             return null;
         }
     }
@@ -162,12 +162,13 @@ public class MySQLDataBase : IDataBase
         }
         catch (Exception ex)
         {
-            // Обработка ошибок
-            OnDataBaseError?.Invoke($"Login error: {ex.Message}");
+            string text = "";
+            text += $"Register Error: {ex.Message}, {connection.Database}\n";
             if (ex.InnerException != null)
             {
-                OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
+                text += $"Inner Error: {ex.InnerException.Message}";
             }
+            OnDataBaseError.Invoke(text);
         }
     }
 
@@ -188,12 +189,12 @@ public class MySQLDataBase : IDataBase
                     if (reader.Read())
                     {
                         // Пользователь найден, проверяем пароль
-                        string storedPassword = reader.GetString("password");                        
+                        string storedPassword = reader.GetString("password");
                         if (storedPassword == password)
                         {
                             userNumber = reader.GetInt32("number");
-                            id = reader.GetInt32("id");                            
-                            name = reader.GetString("name");                            
+                            id = reader.GetInt32("id");
+                            name = reader.GetString("name");
                         }
                         else
                         {
@@ -201,34 +202,31 @@ public class MySQLDataBase : IDataBase
                         }
                     }
                 }
-                if(userNumber != 0 && id != 0) 
+                if (userNumber != 0 && id != 0)
                 {
                     SuccssesLogin(id, userNumber, name);
                     return;
                 }
             }
 
-          
+
         }
         catch (Exception ex)
         {
-            // Обработка ошибок
-            OnDataBaseError?.Invoke($"Login error: {ex.Message}");
-            if (ex.InnerException != null)
-            {
-                OnDataBaseError?.Invoke($"Inner Error: {ex.InnerException.Message}");
-            }
-        }
-        finally
-        {
-            
+            /*  string text = "";
+              text += $"Register Error: {ex.Message}, {connection.Database}\n";
+              if (ex.InnerException != null)
+              {
+                  text += $"Inner Error: {ex.InnerException.Message}";
+              }
+              OnDataBaseError.Invoke(text);
+          */
         }
     }
 
 
-    
 
-    public static People GetRandomPlayer()
+        public static People GetRandomPlayer()
     {
         List<People> players = Controller.AvaiblePeople;
         if (players == null || players.Count == 0)
