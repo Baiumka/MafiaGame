@@ -117,7 +117,7 @@ public class Controller : MonoBehaviour
         if(gameManager == null)
         {
             gameManager = new GameManager();
-            database = new MySQLDataBase();
+            database = new PHPDatabase();
             gameManager.onGameManagerGotError += ShowError;
             gameManager.onGameStarted += StartGame;
             gameManager.onTimerTicked += TickTimer;
