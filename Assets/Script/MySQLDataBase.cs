@@ -286,7 +286,7 @@ public class MySQLDataBase : IDataBase
                         using (MySqlCommand cmdInsertPlayer = new MySqlCommand(queryInsertPlayer, Conn))
                         {
                             cmdInsertPlayer.Parameters.AddWithValue("@id_game", newGameId);
-                            cmdInsertPlayer.Parameters.AddWithValue("@id_people", p.People.Id);
+                            cmdInsertPlayer.Parameters.AddWithValue("@id_people", p.People.id);
                             cmdInsertPlayer.Parameters.AddWithValue("@role", p.Role.ToString());
                             cmdInsertPlayer.Parameters.AddWithValue("@id_place", p.Number);
                             cmdInsertPlayer.Parameters.AddWithValue("@is_alive", !p.IsDead);

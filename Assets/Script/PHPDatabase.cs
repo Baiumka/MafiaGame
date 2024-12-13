@@ -11,9 +11,10 @@ public class PHPDatabase : IDataBase
     private const string LOGIN_PHP = MAIN_URL + "/login.php";
 
     private bool isLogin;
-    private int userID = 0;
+    private User loggedUser;
+    private List<People> avaiblePeople;
     public bool IsLogin => isLogin;
-    public List<People> AvaiblePeople => throw new System.NotImplementedException();
+    public List<People> AvaiblePeople => avaiblePeople;
 
     public event UserInfoHandler OnUserLogin;
     public event ErrorHandler OnDataBaseError;
@@ -37,7 +38,6 @@ public class PHPDatabase : IDataBase
     public async void Login(string login, string password)
     {
         await LoginAsync(login, password);
-        //OnDataBaseError?.Invoke(response);
     }
 
     public async Task LoginAsync(string login, string password)
@@ -62,8 +62,7 @@ public class PHPDatabase : IDataBase
 
             if (response != null && response.status == "success")
             {
-                //Console.WriteLine("Запрос выполнен успешно. Данные:");
-                SuccssesLogin(response.data[0].id, response.data[0].number, response.data[0].name);
+                SuccssesLogin(response);
             }
             else
             {
@@ -77,26 +76,29 @@ public class PHPDatabase : IDataBase
         }
     }
 
-    private void SuccssesLogin(int id, int userNumber, string name)
+    private void SuccssesLogin(ServerResponse response)
     {
-        OnUserLogin?.Invoke(userNumber, name);
-        userID = id;
-        //LoadPeopleList();
+        loggedUser = response.user;
         isLogin = true;
+        OnUserLogin?.Invoke(loggedUser.number, loggedUser.name);
+        ReLoadPeopleList    (response.people);
+        
+    }
+
+    private void ReLoadPeopleList(People[] people)
+    {
+        avaiblePeople = new List<People>();
+        avaiblePeople.AddRange(people);
     }
 
     class ServerResponse
     {
         public string status { get; set; }
         public string message { get; set; }
-        public User[] data { get; set; }
+        public User user { get; set; }
+        public People[] people { get; set; }
     }
 
-    class User
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int number { get; set; }
-    }
+    
 
 }

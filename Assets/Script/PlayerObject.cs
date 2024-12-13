@@ -121,7 +121,7 @@ public class PlayerObject : MonoBehaviour
             }
             else
             {
-                nicknameText.text = playerInfo.People.Nickname;
+                nicknameText.text = playerInfo.People.name;
             }
             if (playerInfo.IsPutted) PutPlayer();
             else UnPutPlayer();

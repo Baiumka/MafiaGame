@@ -26,6 +26,6 @@ public class PeopleObject : MonoBehaviour
 
     private void RedrawPeople()
     {
-        nicknameText.text = peopleInfo.Nickname;
+        nicknameText.text = peopleInfo.name;
     }
 }

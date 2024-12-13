@@ -231,7 +231,7 @@ public class Controller : MonoBehaviour
         }
         else
         {
-            Debug.Log(peopleInfo.Nickname);
+            Debug.Log(peopleInfo.name);
         }
     }
 
@@ -270,7 +270,7 @@ public class Controller : MonoBehaviour
         else if (gameManager.GameState == GameState.SHOOTING)
         {
             InterfaceManager.dialog.ShowDialog(
-            Translator.Message(Messages.SHOOTING_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            Translator.Message(Messages.SHOOTING_CONFIRM) + player.Number + ". " + player.People.name,
             () => gameManager.ShotPlayer(player),
             null
             );
@@ -278,7 +278,7 @@ public class Controller : MonoBehaviour
         else if (gameManager.GameState == GameState.BOSS)
         {
             InterfaceManager.dialog.ShowDialog(
-            Translator.Message(Messages.BOSS_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            Translator.Message(Messages.BOSS_CONFIRM) + player.Number + ". " + player.People.name,
             () => gameManager.BossCheckPlayer(player),
             null
             );
@@ -286,7 +286,7 @@ public class Controller : MonoBehaviour
         else if (gameManager.GameState == GameState.SHERIF)
         {
             InterfaceManager.dialog.ShowDialog(
-            Translator.Message(Messages.SHERIF_CONFIRM) + player.Number + ". " + player.People.Nickname,
+            Translator.Message(Messages.SHERIF_CONFIRM) + player.Number + ". " + player.People.name,
             () => gameManager.SherifCheckPlayer(player),
             null
             );

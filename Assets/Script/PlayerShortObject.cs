@@ -33,7 +33,7 @@ public class PlayerShortObject : MonoBehaviour
                 numberText.color = ColorStore.store.MAFIA_TEXT_COLOR;
                 break;
         }
-        nicknameText.text = player.People.Nickname;
+        nicknameText.text = player.People.name;
         numberText.text = player.Number.ToString();
     }
 

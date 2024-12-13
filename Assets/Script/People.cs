@@ -1,17 +1,18 @@
 
 public class People
 {
-    private string nickname;
-    private int id;
+    public string name;
+    public int id;
+    public int number;
 
-    public People(int id, string nickname)
+    public People(int id, string name, int number = 0)
     {
         this.id = id;
-        this.nickname = nickname;
+        this.name = name;
+        this.number = number;
     }
 
-    public string Nickname { get => nickname; }
-    public int Id { get => id; }
+   
 
    
 }

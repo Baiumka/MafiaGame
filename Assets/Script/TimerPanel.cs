@@ -70,11 +70,11 @@ public class TimerPanel : MonoBehaviour
         Clean();
         if (player.Warn >= 3)
         {
-            headText.text = player.Number + " " + player.People.Nickname + " " + Translator.Message(Messages.MUTED_SPEAKER);
+            headText.text = player.Number + " " + player.People.name + " " + Translator.Message(Messages.MUTED_SPEAKER);
         }
         else
         {
-            headText.text = Translator.Message(Messages.SPEAKER) + player.Number + " " + player.People.Nickname;
+            headText.text = Translator.Message(Messages.SPEAKER) + "\n" + player.Number + " " + player.People.name;
         }
     }
 
@@ -93,7 +93,7 @@ public class TimerPanel : MonoBehaviour
     public void LastWord(Player player)
     {
         Clean();
-        headText.text = player.People.Nickname + " " + Translator.Message(Messages.YOUR_LAST_WORD);
+        headText.text = player.People.name + " " + Translator.Message(Messages.YOUR_LAST_WORD);
     }
 
     public void DopVoteOfficial(List<Player> votedPlayers)
@@ -106,7 +106,7 @@ public class TimerPanel : MonoBehaviour
     {
         string playersText = "\n";
         int i = 1;
-        foreach(Player player in votedPlayers)
+        /*foreach(Player player in votedPlayers)
         {
             playersText += "<color=#"+ (
                     (player.Role == Role.CITIZEN || player.Role == Role.SHERIFF) ? 
@@ -115,6 +115,11 @@ public class TimerPanel : MonoBehaviour
                     ) 
                 + ">" + player.Number + "</color>" + 
                 (i == votedPlayers.Count ? "<color=\"white\">. </color>" : "<color=\"white\">, </color>");
+            i++;
+        }*/
+        foreach (Player player in votedPlayers)
+        {
+            playersText += player.Number.ToString() + (i == votedPlayers.Count ? "." : ", ");
             i++;
         }
         playersText += "\n";
