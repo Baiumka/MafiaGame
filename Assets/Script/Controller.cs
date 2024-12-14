@@ -135,6 +135,7 @@ public class Controller : MonoBehaviour
             gameManager.onMafiaWin += MafiaWin;
             gameManager.onCitizenWin += CitizenWin;
             gameManager.onNoWin += NoWin;
+            gameManager.onGameLaunched += LaunchGame;
 
             database.OnUserLogin += ShowUserInfo;
             database.OnDataBaseError += ShowError;
@@ -144,6 +145,11 @@ public class Controller : MonoBehaviour
         visualManager.Init();
 
 
+    }
+
+    private void LaunchGame(Game newGame)
+    {
+        database.StartNewGame(newGame); 
     }
 
     private void AddPeople(People people)
@@ -329,23 +335,27 @@ public class Controller : MonoBehaviour
     private void NoWin(Game game)
     {
         onNoWin?.Invoke(game);
-        database.WriteResult(game);
+        //database.WriteResult(game);
+        database.EndGame(game, 0);
     }
 
     private void CitizenWin(Game game)
     {
         onCitizenWin?.Invoke(game);
-        database.WriteResult(game);
+        //database.WriteResult(game);
+        database.EndGame(game, 1);
     }
 
     private void MafiaWin(Game game)
     {
         onMafiaWin?.Invoke(game);
-        database.WriteResult(game);
+        //database.WriteResult(game);
+        database.EndGame(game, 2);
     }
     private void StartLastWord(Player player)
     {
         onLastWordStarted?.Invoke(player);
+        
     }
 
     private void StartNight()
@@ -353,7 +363,7 @@ public class Controller : MonoBehaviour
         onNightStarted?.Invoke();
     }
     private void StateChange(GameState gameState)
-    {
+    {    
         onGameStateChanged?.Invoke(gameState);
     }
     private void VotedTurn(Player player)

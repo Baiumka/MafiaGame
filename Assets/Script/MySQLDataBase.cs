@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 
-public class MySQLDataBase : IDataBase 
+public class MySQLDataBase : IDataBase
 {
     private const string CONNECTION_STRING = "Server=junction.proxy.rlwy.net;Port=43851;Database=railway;User ID=root;Password=XEhtSYcfTgVtnbpOOyUbJXSjVSukSEdo;";
     private MySqlConnection connection;
@@ -325,5 +325,23 @@ public class MySQLDataBase : IDataBase
         }
     }
 
-  
+    public void StartNewGame(Game game)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void WriteHistory(History.HistoryEvent historyEvent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EndGame(Game game)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void EndGame(Game game, int winner)
+    {
+        throw new NotImplementedException();
+    }
 }

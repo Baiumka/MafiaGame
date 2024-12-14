@@ -1,5 +1,7 @@
 
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 public delegate void VoteHandler();
 public class Player 
@@ -13,27 +15,27 @@ public class Player
     private bool isBestTurn;
     private int warn;
 
-    public VoidHandler onDataUpdated;
-    public VoteHandler onPlayerPut;
-    public VoteHandler onPlayerVote;
-    public VoteHandler onPlayerDie;
-    public VoteHandler onPreparedForDie;
-    public VoteHandler onAddedToBestTurn;
-    public VoidHandler onTakeWarn;
+    [JsonIgnore] public VoidHandler onDataUpdated;
+    [JsonIgnore] public VoteHandler onPlayerPut;
+    [JsonIgnore] public VoteHandler onPlayerVote;
+    [JsonIgnore] public VoteHandler onPlayerDie;
+    [JsonIgnore] public VoteHandler onPreparedForDie;
+    [JsonIgnore] public VoteHandler onAddedToBestTurn;
+    [JsonIgnore] public VoidHandler onTakeWarn;
 
     public Player(int number)
     {
         this.number = number;
-        //this.people = MySQLDataBase.GetRandomPlayer();
+        //this.people = PHPDatabase.GetRandomPlayer();
     }
 
     public int Number { get => number;}
     public People People { get => people;}
-    public Role Role { get => role; }
+    [JsonConverter(typeof(StringEnumConverter))] public Role Role { get => role; }
     public bool IsDead { get => isDead; }
-    public bool IsPutted { get => isPutted; }
-    public Player Voted { get => voted; }
-    public bool IsBestTurn { get => isBestTurn; }
+    [JsonIgnore] public bool IsPutted { get => isPutted; }
+    [JsonIgnore] public Player Voted { get => voted; }
+    [JsonIgnore] public bool IsBestTurn { get => isBestTurn; }
     public int Warn { get => warn; }
 
     public void Put()

@@ -47,6 +47,7 @@ public class GameManager
     public GameHandler onMafiaWin;
     public GameHandler onCitizenWin;
     public GameHandler onNoWin;
+    public GameHandler onGameLaunched;
     public GameState GameState { get => gameState; }
     public int MaxPlayerCount { get => currentGame.Players.Count; }
 
@@ -455,6 +456,7 @@ public class GameManager
     {
         if (gameState == GameState.VOTE_FOR_UP)
         {
+            currentGame.Log(null, player, EventType.VOTE_TO_EXIT);
             SetState(GameState.DOP_VOTE_LAST_WORD);
         }
         else if(gameState == GameState.MORNING)
@@ -463,6 +465,7 @@ public class GameManager
         }
         else
         {
+            currentGame.Log(null, player, EventType.VOTE_TO_EXIT);
             SetState(GameState.VOTE_LAST_WORD);
         }
         player.Die();
@@ -521,7 +524,8 @@ public class GameManager
             firstSpeaker = null;
             currentTurn = 0;
             SetState(GameState.FIRST_NIGHT_MAFIA);            
-            StartTimer(60);            
+            StartTimer(60);
+            onGameLaunched?.Invoke(currentGame);
         }
         else
         {

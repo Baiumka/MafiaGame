@@ -19,5 +19,7 @@ public interface IDataBase
     public void AddPeople(string name);
     public void Login(string login, string password);
     public void Register(string login, string password, string name);
-    public void WriteResult(Game game);
+    public void StartNewGame(Game game);
+    public void WriteHistory(History.HistoryEvent historyEvent);
+    public void EndGame(Game game, int winner);
 }

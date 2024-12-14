@@ -24,7 +24,7 @@ public class Game
         {
             Player newPlayer = new Player(i);
             players.Add(newPlayer);
-            /* if (i == 1) newPlayer.SetRole(Role.CITIZEN);
+            /*if (i == 1) newPlayer.SetRole(Role.CITIZEN);
             if (i == 2) newPlayer.SetRole(Role.CITIZEN);
             if (i == 3) newPlayer.SetRole(Role.CITIZEN);
             if (i == 4) newPlayer.SetRole(Role.CITIZEN);
