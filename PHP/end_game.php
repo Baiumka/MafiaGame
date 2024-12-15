@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(["status" => "error", "message" => "Ошибка создания игры: " . $e->getMessage()], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "Параметры 'player_number' и 'player_id_people' обязательны и должны быть массивами."], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+       echo json_encode(["status" => "error", "message" => "Параметр 'players' обязателен и должен быть массивом."], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 } else {
     echo json_encode(["status" => "error", "message" => "Метод запроса должен быть POST."], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

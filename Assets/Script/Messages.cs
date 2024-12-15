@@ -50,4 +50,5 @@ public enum Messages
     WRONG_PASSWORD,
     NO_LOGIN,
     TOO_SHORT_NAME,
+    NO_END,
 }

@@ -14,6 +14,7 @@ public class StartWindow : MonoBehaviour
     [SerializeField] Button regButton;
     [SerializeField] Button finalRegButton;
     [SerializeField] Button backButton;
+    [SerializeField] Button gamesListButton;
     [SerializeField] TMP_InputField loginInput;
     [SerializeField] TMP_InputField passwordInput;
     [SerializeField] TMP_InputField nameInput;
@@ -23,6 +24,7 @@ public class StartWindow : MonoBehaviour
     [SerializeField] GameObject loginPanel;
     [SerializeField] GameObject regPanel;
     [SerializeField] GameObject gamePanel;
+    
     
     public void Init()
     {
@@ -34,11 +36,17 @@ public class StartWindow : MonoBehaviour
         startButton.onClick.AddListener(onStartClick);
         playersButton.onClick.AddListener(onPlayerClick);
         loginButton.onClick.AddListener(onLoginClick);
+        gamesListButton.onClick.AddListener(onGamesListClick);
         regButton.onClick.AddListener(onRegButton);
         backButton.onClick.AddListener(onBackButton);
         finalRegButton.onClick.AddListener(onFinalRegClick);
 
         Controller.singlton.onUserLogin += ShowUserInfo;
+    }
+
+    private void onGamesListClick()
+    {
+        Controller.singlton.ShowGamesList();
     }
 
     private void onFinalRegClick()

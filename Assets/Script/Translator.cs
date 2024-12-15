@@ -53,6 +53,7 @@ public class Translator
         firstDict.Add(Messages.MAFIA_WIN, "Победа мафии!");
         firstDict.Add(Messages.CITIZEN_WIN, "Победа мирных!");
         firstDict.Add(Messages.NO_WIN, "Ничья =(");
+        firstDict.Add(Messages.NO_END, "Игра не окончена");
     }
 
     public static string Message(Messages message)

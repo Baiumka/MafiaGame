@@ -16,6 +16,7 @@ public class Controller : MonoBehaviour
     public GameHandler onGameStarted;
     public ErrorHandler onError;
     public VoidHandler onWantedPlayerList;
+    public VoidHandler onWantedGamesList;
     public VoidHandler onWantedStartWidnow;
     public VoidHandler onWantedGameWindow;
     public VoidHandler onBackPressed;
@@ -36,6 +37,8 @@ public class Controller : MonoBehaviour
     public GameHandler onNoWin;
     public UserInfoHandler onUserLogin;
     public PeopleInfoHandler onPeopleAdded;
+    public GameListHandler onGameListRefreshed;
+    public GameDetailsHandler onGameDetailsUpdated;
 
     private Player playerSlotSelecting;
     private Player playerRoleSelecting;
@@ -140,11 +143,23 @@ public class Controller : MonoBehaviour
             database.OnUserLogin += ShowUserInfo;
             database.OnDataBaseError += ShowError;
             database.OnPeopleAdded += AddPeople;
+            database.OnGameListRefreshed += RefreshGameList;
+            database.OnGameDetailsUpdated += ShowGameDetails;
         }
         interfaceManager.Init();
         visualManager.Init();
 
 
+    }
+
+    private void ShowGameDetails(List<ResultPlayer> players, List<ResultHistoryEvent> history, GameInfo game)
+    {
+        onGameDetailsUpdated?.Invoke(players, history, game);
+    }
+
+    private void RefreshGameList(List<GameInfo> gameList)
+    {
+        onGameListRefreshed?.Invoke(gameList);
     }
 
     private void LaunchGame(Game newGame)
@@ -420,6 +435,17 @@ public class Controller : MonoBehaviour
     internal void Register(string text1, string text2, string text3)
     {
         onError?.Invoke("Регистрация недоступна");
+    }
+
+    internal void ShowGamesList()
+    {
+        database.RefreshGameList();
+        onWantedGamesList?.Invoke();
+    }
+
+    internal void ShowFullGameInfo(GameInfo gameInfo)
+    {
+        database.GetGameDetails(gameInfo);
     }
 
     #endregion

@@ -15,6 +15,8 @@ public class MySQLDataBase : IDataBase
     public event UserInfoHandler OnUserLogin;
     public event PeopleInfoHandler OnPeopleAdded;
     public event ErrorHandler OnDataBaseError;
+    public event GameListHandler OnGameListRefreshed;
+    public event GameDetailsHandler OnGameDetailsUpdated;
 
     private MySqlConnection Conn 
     {
@@ -213,14 +215,14 @@ public class MySQLDataBase : IDataBase
         }
         catch (Exception ex)
         {
-            /*  string text = "";
+              string text = "";
               text += $"Register Error: {ex.Message}, {connection.Database}\n";
               if (ex.InnerException != null)
               {
                   text += $"Inner Error: {ex.InnerException.Message}";
               }
               OnDataBaseError.Invoke(text);
-          */
+          
         }
     }
 
@@ -341,6 +343,21 @@ public class MySQLDataBase : IDataBase
     }
 
     public void EndGame(Game game, int winner)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void RefreshGameList()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void GetGameDetails()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void GetGameDetails(GameInfo game)
     {
         throw new NotImplementedException();
     }

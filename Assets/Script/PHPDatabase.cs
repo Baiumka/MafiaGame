@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -13,6 +14,8 @@ public class PHPDatabase : IDataBase
     private const string NEW_GAME = MAIN_URL + "/new_game.php";
     private const string ADD_HISTORY = MAIN_URL + "/add_history.php";
     private const string END_GAME = MAIN_URL + "/end_game.php";
+    private const string GAME_LIST = MAIN_URL + "/game_list.php";
+    private const string GAME_INFO = MAIN_URL + "/game_info.php";
 
     private bool isLogin;
     private User loggedUser;
@@ -25,6 +28,9 @@ public class PHPDatabase : IDataBase
     public event UserInfoHandler OnUserLogin;
     public event ErrorHandler OnDataBaseError;
     public event PeopleInfoHandler OnPeopleAdded;
+    public event GameListHandler OnGameListRefreshed;
+    public event GameDetailsHandler OnGameDetailsUpdated;
+
     private HttpClient _httpClient;
     
     public PHPDatabase() 
@@ -37,6 +43,55 @@ public class PHPDatabase : IDataBase
        AddCharAsync(name);
     }
 
+    public async void RefreshGameList()
+    {
+        try
+        {
+            string fullUrl = $"{GAME_LIST}?id_user={loggedUser.id}";
+            HttpResponseMessage answer = await _httpClient.GetAsync(fullUrl);
+            answer.EnsureSuccessStatusCode();
+            string responseBody = await answer.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<GameListResponse>(responseBody);
+            if (response != null && response.status == "success")
+            {
+                OnGameListRefreshed?.Invoke(response.games.ToList());
+            }
+            else
+            {
+                OnDataBaseError?.Invoke($"Ошибка: {response?.message}");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            OnDataBaseError?.Invoke($"Error: {ex.Message}");
+        }
+    }
+
+    public async void GetGameDetails(GameInfo game)
+    {
+        try
+        {
+            string fullUrl = $"{GAME_INFO}?id_game={game.id}";
+            HttpResponseMessage answer = await _httpClient.GetAsync(fullUrl);
+            answer.EnsureSuccessStatusCode();
+            string responseBody = await answer.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<GameDetailsResponse>(responseBody);
+            if (response != null && response.status == "success")
+            {
+                OnGameDetailsUpdated?.Invoke(response.players, response.log, game);
+            }
+            else
+            {
+                OnDataBaseError?.Invoke($"Ошибка: error on get details");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            OnDataBaseError?.Invoke($"Error: {ex.Message}");
+        }
+    }
 
     public async void AddCharAsync(string nickname)
     {
@@ -125,7 +180,7 @@ public class PHPDatabase : IDataBase
             // Получение текста ответа
             string responseBody = await answer.Content.ReadAsStringAsync();
 
-            var response = JsonConvert.DeserializeObject<ServerResponse>(responseBody);
+            var response = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
 
             if (response != null && response.status == "success")
             {
@@ -143,7 +198,7 @@ public class PHPDatabase : IDataBase
         }
     }
 
-    private void SuccssesLogin(ServerResponse response)
+    private void SuccssesLogin(LoginResponse response)
     {
         loggedUser = response.user;
         isLogin = true;
@@ -235,12 +290,27 @@ public class PHPDatabase : IDataBase
         return players[randomIndex];
     }
 
-    class ServerResponse
+    class GameDetailsResponse
+    {
+        public string status;
+        public List<ResultPlayer> players;
+        public List<ResultHistoryEvent> log;
+    }
+
+
+    class LoginResponse
     {
         public string status { get; set; }
         public string message { get; set; }
         public User user { get; set; }
         public People[] people { get; set; }
+    }
+
+    class GameListResponse
+    {
+        public string status { get; set; }
+        public string message { get; set; }
+        public GameInfo[] games { get; set; }
     }
 
     public class IntResponse

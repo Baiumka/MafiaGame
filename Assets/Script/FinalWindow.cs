@@ -77,5 +77,10 @@ public class FinalWindow : MonoBehaviour
         foreach (Transform child in sherifList) Destroy(child.gameObject);
         foreach (Transform child in bossList) Destroy(child.gameObject);
     }
+
+    internal void DrawResults(List<ResultPlayer> players, List<ResultHistoryEvent> history, GameInfo game)
+    {
+        throw new NotImplementedException();
+    }
 }
 
