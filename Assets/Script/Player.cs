@@ -26,7 +26,7 @@ public class Player
     public Player(int number)
     {
         this.number = number;
-        //this.people = PHPDatabase.GetRandomPlayer();
+        this.people = PHPDatabase.GetRandomPlayer();
     }
 
     public int Number { get => number;}

@@ -35,9 +35,6 @@ public class InterfaceManager : MonoBehaviour
         Controller.singlton.onWantedStartWidnow += ShowStartWindow;
         Controller.singlton.onGameDetailsUpdated += ShowGameDetailsWindow;
 
-        Controller.singlton.onMafiaWin += MafiaWin;
-        Controller.singlton.onCitizenWin += CitizenWin;
-        Controller.singlton.onNoWin += NoWin;
         InitOrder();
         startWindow.Init();
         gameListWindow.Init();
@@ -52,24 +49,6 @@ public class InterfaceManager : MonoBehaviour
     private void ShowGameList()
     {
         ShowWindow(gameListWindow);
-    }
-
-    private void NoWin(Game game)
-    {
-        finalWindow.DrawNoWin(game);
-        ShowWindow(finalWindow);
-    }
-
-    private void CitizenWin(Game game)
-    {
-        finalWindow.DrawCitizenWin(game);
-        ShowWindow(finalWindow);
-    }
-
-    private void MafiaWin(Game game)
-    {
-        finalWindow.DrawMafiaWin(game);
-        ShowWindow(finalWindow);
     }
 
     private void ShowGameWindow()

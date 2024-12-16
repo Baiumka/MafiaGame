@@ -31,10 +31,7 @@ public class Controller : MonoBehaviour
     public VoteOfficialHandler onDopVoteOfficial;
     public PlayerHandler onDopSpeakStarted;
     public PlayerHandler onLastWordStarted;
-    public VoidHandler onNightStarted;
-    public GameHandler onMafiaWin;
-    public GameHandler onCitizenWin;
-    public GameHandler onNoWin;
+    public VoidHandler onNightStarted;   
     public UserInfoHandler onUserLogin;
     public PeopleInfoHandler onPeopleAdded;
     public GameListHandler onGameListRefreshed;
@@ -135,9 +132,7 @@ public class Controller : MonoBehaviour
             gameManager.onDopVoteOfficial += DopVoteOfficial;
             gameManager.onNightStarted += StartNight;
             gameManager.onLastWordStarted += StartLastWord;
-            gameManager.onMafiaWin += MafiaWin;
-            gameManager.onCitizenWin += CitizenWin;
-            gameManager.onNoWin += NoWin;
+            gameManager.onGameEnd += EndGame;
             gameManager.onGameLaunched += LaunchGame;
 
             database.OnUserLogin += ShowUserInfo;
@@ -151,6 +146,8 @@ public class Controller : MonoBehaviour
 
 
     }
+
+    
 
     private void ShowGameDetails(List<ResultPlayer> players, List<ResultHistoryEvent> history, GameInfo game)
     {
@@ -347,26 +344,11 @@ public class Controller : MonoBehaviour
 
     #region Events Duplicates
 
-    private void NoWin(Game game)
+    private void EndGame(Game game, int winner)
     {
-        onNoWin?.Invoke(game);
-        //database.WriteResult(game);
-        database.EndGame(game, 0);
+        database.EndGame(game, winner);        
     }
-
-    private void CitizenWin(Game game)
-    {
-        onCitizenWin?.Invoke(game);
-        //database.WriteResult(game);
-        database.EndGame(game, 1);
-    }
-
-    private void MafiaWin(Game game)
-    {
-        onMafiaWin?.Invoke(game);
-        //database.WriteResult(game);
-        database.EndGame(game, 2);
-    }
+   
     private void StartLastWord(Player player)
     {
         onLastWordStarted?.Invoke(player);

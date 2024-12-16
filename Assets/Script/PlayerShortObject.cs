@@ -12,9 +12,9 @@ public class PlayerShortObject : MonoBehaviour
     [SerializeField] private TMP_Text nicknameText;
 
 
-    public void Init(Player player)
+    public void Init(ResultPlayer player)
     {
-        switch (player.Role) 
+        switch (player.role) 
         {
             case Role.CITIZEN:
                 numberPlate.color = ColorStore.store.CITIZEN_BACKGROUND_COLOR;
@@ -33,8 +33,8 @@ public class PlayerShortObject : MonoBehaviour
                 numberText.color = ColorStore.store.MAFIA_TEXT_COLOR;
                 break;
         }
-        nicknameText.text = player.People.name;
-        numberText.text = player.Number.ToString();
+        nicknameText.text = player.nickname;
+        numberText.text = player.number.ToString();
     }
 
     

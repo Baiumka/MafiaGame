@@ -6,7 +6,7 @@ public class ResultPlayer
     public int number;
     public string nickname;
     public bool is_alive;
-    public string role;
+    public Role role;
     
 
 }

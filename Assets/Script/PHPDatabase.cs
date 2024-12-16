@@ -29,7 +29,7 @@ public class PHPDatabase : IDataBase
     public event ErrorHandler OnDataBaseError;
     public event PeopleInfoHandler OnPeopleAdded;
     public event GameListHandler OnGameListRefreshed;
-    public event GameDetailsHandler OnGameDetailsUpdated;
+    public event GameDetailsHandler OnGameDetailsUpdated;   
 
     private HttpClient _httpClient;
     
@@ -70,8 +70,8 @@ public class PHPDatabase : IDataBase
 
     public async void GetGameDetails(GameInfo game)
     {
-        try
-        {
+       // try
+       // {
             string fullUrl = $"{GAME_INFO}?id_game={game.id}";
             HttpResponseMessage answer = await _httpClient.GetAsync(fullUrl);
             answer.EnsureSuccessStatusCode();
@@ -86,11 +86,11 @@ public class PHPDatabase : IDataBase
                 OnDataBaseError?.Invoke($"Ошибка: error on get details");
             }
 
-        }
-        catch (Exception ex)
-        {
-            OnDataBaseError?.Invoke($"Error: {ex.Message}");
-        }
+       // }
+       // catch (Exception ex)
+       // {
+       //     OnDataBaseError?.Invoke($"Error: {ex.Message}");
+       // }
     }
 
     public async void AddCharAsync(string nickname)
@@ -261,9 +261,17 @@ public class PHPDatabase : IDataBase
             var result = JsonConvert.DeserializeObject<IntResponse>(responseBody);
             if (result != null && result.status == "success")
             {
+                GameInfo endedGame = new GameInfo();
+                endedGame.id = currentGameId;
+                endedGame.winner = winner;
+                endedGame.is_end = true;
+                endedGame.citizen_alive = game.Citizens;
+                endedGame.mafia_alive = game.Mafia;                
+                GetGameDetails(endedGame);
                 currentGameId = 0;
                 currentGame.history.onHistoryAdded -= WriteHistory;
                 currentGame = null;
+
             }
             else
             {

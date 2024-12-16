@@ -10,6 +10,7 @@ public delegate void DayHandler(int dayNumber);
 public delegate void PlayerHandler(Player player);
 public delegate void VoteOfficialHandler(List<Player> votedPlayers);
 public delegate void IntHandler(int i);
+public delegate void EndGameHandler(Game game, int winner);
 public class GameManager 
 {
     private Game currentGame;
@@ -44,9 +45,7 @@ public class GameManager
     public PlayerHandler onDopSpeakStarted;
     public PlayerHandler onLastWordStarted;
     public VoidHandler onNightStarted;
-    public GameHandler onMafiaWin;
-    public GameHandler onCitizenWin;
-    public GameHandler onNoWin;
+    public EndGameHandler onGameEnd;
     public GameHandler onGameLaunched;
     public GameState GameState { get => gameState; }
     public int MaxPlayerCount { get => currentGame.Players.Count; }
@@ -114,19 +113,19 @@ public class GameManager
     {
         if(currentGame.Mafia >= currentGame.Citizens && currentGame.Mafia > 0)
         {
-            onMafiaWin?.Invoke(currentGame);            
+            onGameEnd?.Invoke(currentGame, 2);            
         }
 
         if(currentGame.Mafia == 0)
         {
             if(currentGame.Citizens >= 0)
             {
-                onCitizenWin?.Invoke(currentGame);
+                onGameEnd?.Invoke(currentGame, 1);
             }
             else
             {
                 //onGameManagerGotError?.Invoke("Мафия: " + currentGame.Mafia + " Alive: " + currentGame.Citizens);
-                onNoWin?.Invoke(currentGame);
+                onGameEnd?.Invoke(currentGame, 0);
             }            
         }
         SetState(GameState.CLOSING);
@@ -175,10 +174,14 @@ public class GameManager
         switch (gameState)
         {
             case GameState.BEST_TURN:
+                foreach (Player p in bestTurn)
+                {
+                    currentGame.Log(firstKilled, p, EventType.BEST_TURN);
+                }
                 SetState(GameState.MORNING);
                 break;
             case GameState.SHERIF:
-                if (currentTurn == 1 && shootedPlayer != null)
+                if ((currentTurn == 1 && currentGame.AlivePlayers.Count >= 9) && shootedPlayer != null)
                 {
                     firstKilled = shootedPlayer;
                     bestTurn = new List<Player>();
@@ -224,7 +227,7 @@ public class GameManager
                 break;
             case GameState.VOTE_FOR_UP:
                 float result = voteResult[votedPlayers[votePlayerIndex]];
-                float alivePlayersCount = currentGame.AlivePlayers.Count / 2;
+                float alivePlayersCount = currentGame.AlivePlayers.Count / 2;                
                 if (result > alivePlayersCount)
                 {
                     votePlayerIndex = 0;
@@ -244,8 +247,19 @@ public class GameManager
                     }
                 }
                 votePlayerIndex++;
+                
                 if (votePlayerIndex >= votedPlayers.Count)
                 {
+                    foreach (Player p in currentGame.Players)
+                    {
+                        if (p.Voted != null)
+                        {
+                            if (p.Number == p.Voted.Number)
+                            {
+                                currentGame.Log(p, null, EventType.SELF_VOTE);
+                            }
+                        }
+                    }
                     List<Player> results = CountVoted();
                     if (results != null)
                     {
@@ -294,6 +308,16 @@ public class GameManager
                 votePlayerIndex++;                
                 if (votePlayerIndex >= votedPlayers.Count)
                 {
+                    foreach (Player p in currentGame.Players)
+                    {
+                        if (p.Voted != null)
+                        {
+                            if (p.Number == p.Voted.Number)
+                            {
+                                currentGame.Log(p, null, EventType.SELF_VOTE);
+                            }
+                        }
+                    }
                     List<Player> results = CountVoted();
                     if (results != null)                    
                     {
@@ -309,15 +333,18 @@ public class GameManager
                 }
                 break;
             case GameState.VOTE_OFFIACIAL:
-                votePlayerIndex = 0;
-                
-                if(votedPlayers.Count == 0)
+                votePlayerIndex = 0;               
+                if (votedPlayers.Count == 0)
                 {
                     StartNight();
                 }
-                else if(votedPlayers.Count == 1)
+                else if (votedPlayers.Count == 1 && currentTurn != 1)
                 {
                     GiveLastWord(votedPlayers[0]);
+                }
+                else if (votedPlayers.Count == 1 && currentTurn == 1)
+                {
+                    StartNight();
                 }
                 else
                 {
@@ -382,6 +409,7 @@ public class GameManager
 
     private void StandartMorning()
     {
+        currentGame.Log(null,null,EventType.NEW_DAY);
         foreach (Player player in currentGame.Players)
         {
             player.UnPut();
@@ -411,8 +439,7 @@ public class GameManager
                 if (bestTurn.Count < 3)
                 {
                     bestTurn.Add(player);
-                    player.AddBestTurn();
-                    currentGame.Log(firstKilled, player, EventType.BEST_TURN);
+                    player.AddBestTurn();                    
                 }
             }
             
@@ -438,7 +465,8 @@ public class GameManager
     {
         NextState();
         shootedPlayer = player;
-        currentGame.Log(null, player, EventType.KILL);
+        if(player.Role == Role.MAFIA || player.Role == Role.BOSS) currentGame.Log(null, player, EventType.SELF_KILL);
+        else currentGame.Log(null, player, EventType.KILL);
         player.PrepareForDie();
         //Добавляем лог
     }
@@ -488,7 +516,7 @@ public class GameManager
         }
 
         player.Vote(votedPlayers[votePlayerIndex]);
-        voteResult[votedPlayers[votePlayerIndex]]++;
+        voteResult[votedPlayers[votePlayerIndex]]++;        
         onVotesChanged?.Invoke(voteResult[votedPlayers[votePlayerIndex]]);        
     }
 

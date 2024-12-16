@@ -22,18 +22,26 @@ public class GameListItem : MonoBehaviour
             {
                 case 1:
                     winerText.text = Translator.Message(Messages.CITIZEN_WIN) + "\n" + gameInfo.citizen_alive + ":" + gameInfo.mafia_alive;
+                    winerText.color = ColorStore.store.CITIZEN_TEXT_COLOR;
+                    winerText.transform.parent.GetComponent<Image>().color = ColorStore.store.CITIZEN_BACKGROUND_COLOR;
                     break;
                 case 2:
                     winerText.text = Translator.Message(Messages.MAFIA_WIN) + "\n" + gameInfo.citizen_alive + ":" + gameInfo.mafia_alive;
+                    winerText.color = ColorStore.store.MAFIA_TEXT_COLOR;
+                    winerText.transform.parent.GetComponent<Image>().color = ColorStore.store.MAFIA_BACKGROUND_COLOR;
                     break;
                 default:
                     winerText.text = Translator.Message(Messages.NO_WIN);
+                    winerText.color = ColorStore.store.NONE_TEXT_COLOR;
+                    winerText.transform.parent.GetComponent<Image>().color = ColorStore.store.NONE_BACKGROUND_COLOR;
                     break;
             }
         }
         else 
         {
             winerText.text = Translator.Message(Messages.NO_END);
+            winerText.color = ColorStore.store.NONE_TEXT_COLOR;
+            winerText.transform.parent.GetComponent<Image>().color = ColorStore.store.NONE_BACKGROUND_COLOR;
         }
     }
 

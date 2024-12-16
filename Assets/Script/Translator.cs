@@ -1,12 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Translator
 {
     private static Dictionary<Messages, string> firstDict;
+    private static Dictionary<EventType, string> actionsDict;
 
     public static void Init()
+    {
+        InitMainDict();
+        InitActionDict();
+    }
+
+    private static void InitActionDict()
+    {
+        actionsDict = new Dictionary<EventType, string>();
+        actionsDict.Add(EventType.KILL, "убит ночью");
+        actionsDict.Add(EventType.VOTE_TO_EXIT, "изгнан городом");
+        actionsDict.Add(EventType.SELF_VOTE, "проголосовал в себя");
+        actionsDict.Add(EventType.SELF_KILL, "мафия убила своего");
+        actionsDict.Add(EventType.PUT, "выставил");
+        actionsDict.Add(EventType.BOSS_CHECK, "проверил на шерифство");
+        actionsDict.Add(EventType.SHERIF_CHECK, "ищет мафию");
+        actionsDict.Add(EventType.BEST_TURN, "записал в лучший ход");
+        actionsDict.Add(EventType.OUT, "ушел");
+        actionsDict.Add(EventType.KICKED, "выгнан ведущем");
+        actionsDict.Add(EventType.WARN, "получил предупреждение");
+        actionsDict.Add(EventType.WARN_EXIT, "набрал 4 предупреждения");
+        actionsDict.Add(EventType.NEW_DAY, "наступил новый день");
+    }
+
+    private static void InitMainDict()
     {
         firstDict = new Dictionary<Messages, string>();
         firstDict.Add(Messages.MISS_SHOOTING_CONFIRM, "Вы уверены что мафия промахнулась? ");
@@ -19,8 +46,8 @@ public class Translator
         firstDict.Add(Messages.VOTES_COUNT, "Голосов: ");
         firstDict.Add(Messages.VOTE, "Кто против игрока №");
         firstDict.Add(Messages.CROSSFIRE, "Перестрелка");
-        firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосвание выставлены игроки: ");        
-        firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");        
+        firstDict.Add(Messages.VOTE_OFFICIAL1, "На голосвание выставлены игроки: ");
+        firstDict.Add(Messages.VOTE_OFFICIAL2, "Голосуем именно в таком порядке: ");
         firstDict.Add(Messages.ALREADY_PUTTED, "Игрок уже выставлял кого-то");
         firstDict.Add(Messages.ALREADY_VOTED, "Игрок уже выставлен на голосование");
         firstDict.Add(Messages.ALREADY_VOTED_VOTE, "Этот игрок уже голосовал.");
@@ -65,6 +92,18 @@ public class Translator
         catch 
         {
             return "Exception by tranlator on Message: " + message;
+        }
+    }
+
+    public static string Action(EventType action)
+    {
+        try
+        {
+            return actionsDict[action];
+        }
+        catch
+        {
+            return "Exception by tranlator on Message: " + action;
         }
     }
 
