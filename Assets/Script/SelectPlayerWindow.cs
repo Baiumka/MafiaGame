@@ -11,14 +11,21 @@ public class SelectPlayerWindow : MonoBehaviour
     [SerializeField] Transform spawnPanel;
     [SerializeField] TMP_InputField newPlayerNameInput;
     [SerializeField] Button addNewPlayerButton;
+    [SerializeField] Button exitButton;
 
     private List<PeopleObject> peopleObjectList;
 
-    private void Start()
+    public void Init()
     {
         addNewPlayerButton.onClick.AddListener(AddPlayer);
+        exitButton.onClick.AddListener(ExitButton);
 
         Controller.singlton.onPeopleAdded += DrawPeople;
+    }
+
+    private void ExitButton()
+    {
+        Controller.singlton.ReturnBack();
     }
 
     private void AddPlayer()

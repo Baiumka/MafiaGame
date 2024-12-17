@@ -34,7 +34,18 @@ public class PlayerShortObject : MonoBehaviour
                 break;
         }
         nicknameText.text = player.nickname;
+        if (player.is_alive == false)
+        {
+            nicknameText.color = Color.black;
+            nicknameText.fontStyle = FontStyles.Strikethrough;
+        }
+        else
+        {
+            nicknameText.color = Color.white;
+        }
         numberText.text = player.number.ToString();
+
+        
     }
 
     

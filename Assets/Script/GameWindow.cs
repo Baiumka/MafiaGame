@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class GameWindow : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class GameWindow : MonoBehaviour
 
     private void Start()
     {
+        Controller.singlton.onWantedStartWidnow += HideContextMenu;
         Controller.singlton.onBackPressed += HideContextMenu;
         Controller.singlton.onGameStateChanged += ChangeState;
         Controller.singlton.onTimerTicked += TickTimer;
@@ -212,7 +214,9 @@ public class GameWindow : MonoBehaviour
 
     private void ShowRoleContext(Vector3 pos, Player player)
     {
-        Controller.singlton.PrepareForRole(player);
+        Controller.singlton.PrepareForRole(player);        
+        if (pos.y > 855)
+            pos = new Vector3(pos.x,855,pos.z);
         roleContextMenu.transform.position = pos;
         roleContextMenu.SetActive(true);
     }

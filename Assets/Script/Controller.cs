@@ -199,7 +199,7 @@ public class Controller : MonoBehaviour
 
 
 
-    private void ReturnBack()
+    public void ReturnBack()
     {
         if(InterfaceManager.dialog.IsShown)
         {
@@ -207,28 +207,31 @@ public class Controller : MonoBehaviour
             return;
         }
 
-        switch (gameManager.GameState)
+        if(gameManager.GameState == GameState.CLOSING)
         {
-            case GameState.NONE:
-                onWantedStartWidnow?.Invoke();
-                playerSlotSelecting = null;
-                break;
-            case GameState.GIVE_ROLE:
-                if (playerSlotSelecting != null)
-                {
-                    onWantedGameWindow?.Invoke();
-                    playerSlotSelecting = null;
-                }
-                else
-                {
-                    onBackPressed?.Invoke();
-                    if (playerRoleSelecting != null)
-                    {
-                        playerRoleSelecting = null;
-                    }
-                }
-                break;
+            onWantedStartWidnow?.Invoke();
+            return;
         }
+
+        if(gameManager.GameState == GameState.GIVE_ROLE)
+        { 
+            if (playerSlotSelecting != null)
+            {
+                onWantedGameWindow?.Invoke();
+                playerSlotSelecting = null;
+            }
+            else
+            {
+                gameManager.CancelGame();
+                onWantedStartWidnow?.Invoke();
+                if (playerRoleSelecting != null)
+                {
+                    playerRoleSelecting = null;
+                }
+            }
+            return;
+        }
+        onBackPressed?.Invoke();
     }
 
     public void PrepareForRole(Player player)

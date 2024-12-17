@@ -22,9 +22,19 @@ public class FinalWindow : MonoBehaviour
     [SerializeField] private TMP_Text firstKillNameText;
     [SerializeField] private Transform bestTurnTranform;
     [SerializeField] private GameObject shortNumberPrefab;
+    [SerializeField] private Button exitButton;
 
     private List<ResultHistoryEvent> bestTurn;
-    
+
+    public void Init()
+    {
+        exitButton.onClick.AddListener(OnLickExitButton);
+    }
+
+    private void OnLickExitButton()
+    {
+        Controller.singlton.ReturnBack();
+    }
 
     private void DrawMafiaWin()
     {

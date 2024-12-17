@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Timers;
+using UnityEngine.UI;
 
 public delegate void GameHandler(Game newGame); 
 public delegate void ErrorHandler(string errorText);
@@ -113,7 +114,9 @@ public class GameManager
     {
         if(currentGame.Mafia >= currentGame.Citizens && currentGame.Mafia > 0)
         {
-            onGameEnd?.Invoke(currentGame, 2);            
+            onGameEnd?.Invoke(currentGame, 2);
+            SetState(GameState.CLOSING);
+            timer.Stop();
         }
 
         if(currentGame.Mafia == 0)
@@ -121,15 +124,18 @@ public class GameManager
             if(currentGame.Citizens >= 0)
             {
                 onGameEnd?.Invoke(currentGame, 1);
+                SetState(GameState.CLOSING);
+                timer.Stop();
             }
             else
             {
                 //onGameManagerGotError?.Invoke("Мафия: " + currentGame.Mafia + " Alive: " + currentGame.Citizens);
                 onGameEnd?.Invoke(currentGame, 0);
+                SetState(GameState.CLOSING);
+                timer.Stop();
             }            
         }
-        SetState(GameState.CLOSING);
-        timer.Stop();
+        
     }
    
 
@@ -165,6 +171,12 @@ public class GameManager
         {
             return maxsPlayers;
         }
+    }
+
+    public void CancelGame()
+    {
+        currentGame = null;
+        gameState = GameState.NONE;
     }
         
 

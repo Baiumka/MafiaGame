@@ -86,7 +86,22 @@ public class PlayerObject : MonoBehaviour
 
     private void Die()
     {
-        this.gameObject.SetActive(false);
+
+        Destroy(voteButton.image);
+        Destroy(kickButton.image);
+        Destroy(warnButton.image);
+        voteButton.enabled = false;
+        kickButton.enabled = false;
+        warnButton.enabled = false;
+        foreach(Transform child in voteButton.transform) Destroy(child.gameObject);
+        foreach(Transform child in kickButton.transform) Destroy(child.gameObject);
+        foreach(Transform child in warnButton.transform) Destroy(child.gameObject);
+        Image img = this.GetComponent<Image>();
+        Color c = new Color(img.color.r, img.color.g, img.color.b, img.color.a-0.5f);
+        img.color = c;
+
+        nicknameText.fontStyle = FontStyles.Strikethrough;
+        nicknameText.color = Color.black;
     }
 
     private void VotePlayer()
@@ -102,12 +117,14 @@ public class PlayerObject : MonoBehaviour
 
     private void PutPlayer()
     {
-        voteButton.GetComponent<Image>().color = Color.red;
+        Image img = voteButton.GetComponent<Image>();
+        if (img != null) img.color = Color.red;
     }
 
     private void UnPutPlayer()
     {
-        voteButton.GetComponent<Image>().color = Color.white;
+        Image img = voteButton.GetComponent<Image>();
+        if(img != null) img.color = Color.white;
     }
 
     private void RedrawPlayer()

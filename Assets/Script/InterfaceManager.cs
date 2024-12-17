@@ -34,10 +34,35 @@ public class InterfaceManager : MonoBehaviour
         Controller.singlton.onWantedGameWindow += ShowGameWindow;
         Controller.singlton.onWantedStartWidnow += ShowStartWindow;
         Controller.singlton.onGameDetailsUpdated += ShowGameDetailsWindow;
+        Controller.singlton.onBackPressed += DoBack;
 
         InitOrder();
         startWindow.Init();
         gameListWindow.Init();
+        finalWindow.Init();
+        selectPlayerWindow.Init();
+    }
+
+    private void DoBack()
+    {
+        if (gameListWindow.gameObject.activeSelf)
+        {
+            ShowWindow(startWindow);
+            return;
+        }
+
+        if (selectPlayerWindow.gameObject.activeSelf)
+        {
+            ShowWindow(startWindow);
+            return;
+        }
+
+        if (finalWindow.gameObject.activeSelf) 
+        {
+            ShowWindow(gameListWindow);
+            return;
+        }
+       
     }
 
     private void ShowGameDetailsWindow(List<ResultPlayer> players, List<ResultHistoryEvent> history, GameInfo game)
