@@ -1,24 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 using System.Timers;
 
-public class TimerPanel : MonoBehaviour
+
+public class TickPanel : MonoBehaviour
 {
     [SerializeField] private Button resetButton;
     [SerializeField] private Button bonusButton;
     [SerializeField] private Button nextButton;
     [SerializeField] private Text seocndsText;
     [SerializeField] private TMP_Text headText;
-    public int currentSeconds;
+    private int currentSeconds;
     private GameState currentGameState;
-    Timer timer;
-    int timerTicks;
+    private Timer timer;
+    private int timerTicks;
+    private int timerTicked = -1;
+    private int timerHouse = -1;
 
-    private void Start()
+    public void Init()
     {
         resetButton.onClick.AddListener(ResetTimer);
         bonusButton.onClick.AddListener(BonusTimer);
@@ -26,7 +27,7 @@ public class TimerPanel : MonoBehaviour
         seocndsText.color = Color.white;
         seocndsText.text = "";
 
-        timer = new Timer(2000);
+        timer = new Timer(1500);
         timer.Elapsed += OnTimerTick;
         timer.AutoReset = true;
     }
@@ -36,8 +37,8 @@ public class TimerPanel : MonoBehaviour
         if (timerTicks < Controller.singlton.MaxPlayerCount)
         {
             timerTicks++;
-            seocndsText.text = timerTicks.ToString();
-        }        
+            timerHouse = timerTicks;            
+        }
     }
 
     private void NextState()
@@ -55,19 +56,34 @@ public class TimerPanel : MonoBehaviour
         Controller.singlton.ResetTime();
     }
 
+    private void Update()
+    {        
+        if (timerTicked != -1)
+        {                      
+            if (timerTicked == 0) OnTimerEnd();
+            if (timerTicked == 10) AudioManager.instance.Play(AudioSounds.TEN_SECONDS);
+            if (timerTicked < 0) timerTicked = 0;
+            currentSeconds = timerTicked;
+            seocndsText.color = Color.white;
+            seocndsText.text = currentSeconds.ToString();
+            timerTicked = -1;
+        }
+        if(timerHouse != -1)
+        {
+            seocndsText.color = Color.black;
+            seocndsText.text = timerTicks.ToString();
+            timerHouse = -1;
+        }
+    }
+
     public void SetSeconds(int sec)
     {
-        //if (sec > 0) nextButton.gameObject.SetActive(false);
-        if (sec == 0) OnTimerEnd();
-        if(sec < 0) sec = 0;
-        currentSeconds = sec;
-
-        seocndsText.text = currentSeconds.ToString();             
+        timerTicked = sec; 
     }
 
     public void SetSpeaker(Player player)
     {
-        Clean();
+        Clean();        
         if (player.Warn >= 3)
         {
             headText.text = player.Number + " " + player.People.name + " " + Translator.Message(Messages.MUTED_SPEAKER);
@@ -81,7 +97,7 @@ public class TimerPanel : MonoBehaviour
     public void SetVoteCount(int i)
     {
         seocndsText.color = Color.red;
-        seocndsText.text =  Translator.Message(Messages.VOTES_COUNT) +  " " + i;
+        seocndsText.text = Translator.Message(Messages.VOTES_COUNT) + " " + i;
     }
 
     public void VotePlayer(Player player)
@@ -164,12 +180,12 @@ public class TimerPanel : MonoBehaviour
     public void SetState(GameState gameState)
     {
         currentGameState = gameState;
-        switch(gameState)
+        switch (gameState)
         {
             case GameState.BEST_TURN:
                 headText.text = Translator.Message(Messages.BEST_TURN);
                 break;
-            case GameState.SHERIF:                
+            case GameState.SHERIF:
                 headText.text = Translator.Message(Messages.SHERIF_CHEKING);
                 break;
             case GameState.BOSS:

@@ -373,6 +373,7 @@ public class Controller : MonoBehaviour
 
     private void TickTimer(int now, int final)
     {
+       
         onTimerTicked?.Invoke(now, final);
     }
     private void ShowError(string errorText)

@@ -41,6 +41,7 @@ public class InterfaceManager : MonoBehaviour
         gameListWindow.Init();
         finalWindow.Init();
         selectPlayerWindow.Init();
+        gameWindow.Init();
     }
 
     private void DoBack()

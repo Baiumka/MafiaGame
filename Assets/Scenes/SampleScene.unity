@@ -18354,6 +18354,8 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420034}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -18435,6 +18437,116 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 6.386, y: 50.991, z: 0}
+--- !u!82 &519420033
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8709d242fed33494c81aa0e03f4feb0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tenSeconds: {fileID: 8300000, guid: 680b4da23f7d202419ac7d3d656ae959, type: 3}
 --- !u!1001 &523265939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19843,7 +19955,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &576034194
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19884,7 +19996,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 4181361993980817069, guid: 55d9616fb971fcd40b12bd9c3aaf292d, type: 3}
   roleContextMenu: {fileID: 1347008708}
   startGameButton: {fileID: 1720822221}
-  timerPanel: {fileID: 768044747}
+  tickPanel: {fileID: 768044750}
   dayText: {fileID: 1879249647}
 --- !u!1001 &578235387
 PrefabInstance:
@@ -25502,8 +25614,9 @@ GameObject:
   - component: {fileID: 768044749}
   - component: {fileID: 768044748}
   - component: {fileID: 768044747}
+  - component: {fileID: 768044750}
   m_Layer: 5
-  m_Name: TimerPanel
+  m_Name: Tick Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25530,8 +25643,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -381.4927, y: 350}
-  m_SizeDelta: {x: 762.9854, y: 346.528}
+  m_AnchoredPosition: {x: -381.49268, y: 449.79404}
+  m_SizeDelta: {x: 762.9854, y: 556.9399}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &768044747
 MonoBehaviour:
@@ -25551,6 +25664,8 @@ MonoBehaviour:
   seocndsText: {fileID: 989204600}
   headText: {fileID: 2033493001}
   currentSeconds: 0
+  currentGameState: 0
+  timerTicks: 0
 --- !u!114 &768044748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25589,6 +25704,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768044745}
   m_CullTransparentMesh: 1
+--- !u!114 &768044750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768044745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5880e7c3918cdc488b3643ef503ae71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetButton: {fileID: 1763893122}
+  bonusButton: {fileID: 259291297}
+  nextButton: {fileID: 1049418959}
+  seocndsText: {fileID: 989204600}
+  headText: {fileID: 2033493001}
 --- !u!1001 &768125995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32427,7 +32559,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 200
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -35439,7 +35571,7 @@ RectTransform:
   m_Father: {fileID: 592712713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -35929,7 +36061,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1103752480
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35969,7 +36101,7 @@ MonoBehaviour:
   spawnPanel: {fileID: 113806908}
   newPlayerNameInput: {fileID: 998890307}
   addNewPlayerButton: {fileID: 977172220}
-  exitButton: {fileID: 0}
+  exitButton: {fileID: 1720106714}
 --- !u!1001 &1104205691
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -53963,7 +54095,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1720822220
 RectTransform:
   m_ObjectHideFlags: 0
@@ -67462,9 +67594,9 @@ RectTransform:
   m_Father: {fileID: 1872103889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144382650
 MonoBehaviour:

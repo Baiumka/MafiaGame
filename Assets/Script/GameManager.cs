@@ -1,3 +1,4 @@
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Timers;
@@ -593,20 +594,23 @@ public class GameManager
     {     
         secondsTicked = 0;
         currentTimerFinal = seconds;        
-        onTimerTicked?.Invoke(secondsTicked, currentTimerFinal);
+        onTimerTicked.Invoke(secondsTicked, currentTimerFinal);
         timer.Start();
+        
     }
 
     private void OnTimerTick(object sender, ElapsedEventArgs e)
-    {
+    {        
         secondsTicked++;
-        onTimerTicked?.Invoke(secondsTicked, currentTimerFinal);
+        onTimerTicked.Invoke(secondsTicked, currentTimerFinal);
         if (secondsTicked >= currentTimerFinal)
         {
             timer.Stop();          
             OnTimerCompleted();
         }
     }
+
+    
 
     private void OnTimerCompleted()
     {

@@ -12,7 +12,7 @@ public class GameWindow : MonoBehaviour
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject roleContextMenu;
     [SerializeField] Button startGameButton;
-    [SerializeField] TimerPanel timerPanel;
+    [SerializeField] TickPanel tickPanel;
     [SerializeField] TMP_Text dayText;
     
 
@@ -23,10 +23,10 @@ public class GameWindow : MonoBehaviour
     {
         roleContextMenu.SetActive(false);
         startGameButton.gameObject.SetActive(true);
-        timerPanel.gameObject.SetActive(false);
+        tickPanel.gameObject.SetActive(false);
     }
 
-    private void Start()
+    public void Init()
     {
         Controller.singlton.onWantedStartWidnow += HideContextMenu;
         Controller.singlton.onBackPressed += HideContextMenu;
@@ -45,13 +45,14 @@ public class GameWindow : MonoBehaviour
         
 
         startGameButton.onClick.AddListener(OnStartButtonClick);
+        tickPanel.Init();
     }
 
    
 
     private void LastWord(Player player)
     {
-        timerPanel.LastWord(player);
+        tickPanel.LastWord(player);
     }
 
   
@@ -59,7 +60,7 @@ public class GameWindow : MonoBehaviour
     private void DopVoteOfficial(List<Player> votedPlayers)
     {
         ChangeState(GameState.DOP_VOTE_OFFICIAL);
-        timerPanel.DopVoteOfficial(votedPlayers);
+        tickPanel.DopVoteOfficial(votedPlayers);
     }
 
     private void DopSpeakStart(Player player)
@@ -71,40 +72,41 @@ public class GameWindow : MonoBehaviour
     private void DopSpeakOfficial(List<Player> votedPlayers)
     {
         ChangeState(GameState.DOP_SPEAK);
-        timerPanel.DopSpeakOfficial(votedPlayers);
+        tickPanel.DopSpeakOfficial(votedPlayers);
     }
 
     private void UpdateVotes(int i)
     {
-        timerPanel.SetVoteCount(i);
+        tickPanel.SetVoteCount(i);
     }
 
     private void VoteTurn(Player player)
     {
         ChangeState(GameState.VOTE);
-        timerPanel.VotePlayer(player);
+        tickPanel.VotePlayer(player);
     }
 
     private void VoteOfficial(List<Player> votedPlayers)
     {
         ChangeState(GameState.VOTE_OFFIACIAL);
-        timerPanel.Clean();
-        timerPanel.VoteOfficial(votedPlayers);
+        tickPanel.Clean();
+        tickPanel.VoteOfficial(votedPlayers);
     }
 
     private void ChangeSpeaker(Player player)
     {
-        timerPanel.SetSpeaker(player);
+        tickPanel.SetSpeaker(player);
     }
 
     private void NewDay(int dayNumber)
     {
+        
         dayText.SetText(Translator.Message(Messages.DAY) + dayNumber);
     }
 
     private void TickTimer(int now, int final)
-    {
-        timerPanel.SetSeconds(final - now);
+    {        
+        tickPanel.SetSeconds(final - now);
     }
 
     private void ChangeState(GameState gameState)
@@ -114,27 +116,27 @@ public class GameWindow : MonoBehaviour
         switch(visibleGameState)
         {
             case GameState.BEST_TURN:
-                timerPanel.SetState(visibleGameState);
+                tickPanel.SetState(visibleGameState);
                 break;
             case GameState.SHERIF:
-                timerPanel.SetState(visibleGameState);
+                tickPanel.SetState(visibleGameState);
                 break;
             case GameState.BOSS:
-                timerPanel.SetState(visibleGameState);                
+                tickPanel.SetState(visibleGameState);                
                 break;
             case GameState.SHOOTING:
                 foreach (PlayerObject po in playersList)
                 {
                     po.ShowRole();
                 }
-                timerPanel.SetState(visibleGameState);
+                tickPanel.SetState(visibleGameState);
                 break;
             case GameState.NIGHT:                
                 dayText.text = Translator.Message(Messages.NIGHT);
-                timerPanel.SetState(visibleGameState);
+                tickPanel.SetState(visibleGameState);
                 break;
             case GameState.VOTE_FOR_UP:
-                timerPanel.VoteForUp();
+                tickPanel.VoteForUp();
                 break;
             case GameState.DOP_SPEAK:
                 dayText.text = Translator.Message(Messages.CROSSFIRE);
@@ -154,8 +156,8 @@ public class GameWindow : MonoBehaviour
                 }
                 break;
             case GameState.DAY:
-                timerPanel.gameObject.SetActive(true);
-                timerPanel.SetState(visibleGameState);
+                tickPanel.gameObject.SetActive(true);
+                tickPanel.SetState(visibleGameState);
                 foreach(PlayerObject po in playersList)
                 {
                     po.ShowVoteButton();
@@ -167,12 +169,12 @@ public class GameWindow : MonoBehaviour
                     po.HideRole();
                 }
                 dayText.SetText(Translator.Message(Messages.MORNING));
-                timerPanel.Clean();
+                tickPanel.Clean();
                 break;
             case GameState.FIRST_NIGHT_MAFIA:
                 startGameButton.gameObject.SetActive(false);
-                timerPanel.gameObject.SetActive(true);
-                timerPanel.SetState(visibleGameState);
+                tickPanel.gameObject.SetActive(true);
+                tickPanel.SetState(visibleGameState);
                 dayText.SetText(Translator.Message(Messages.FIRST_NIGHT));
                 foreach (PlayerObject po in playersList)
                 {
@@ -180,7 +182,7 @@ public class GameWindow : MonoBehaviour
                 }
                 break;
             case GameState.FIRST_NIGHT_SHERIF:
-                timerPanel.SetState(visibleGameState);              
+                tickPanel.SetState(visibleGameState);              
                 break;
             default:
                 break;
