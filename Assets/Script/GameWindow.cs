@@ -202,6 +202,7 @@ public class GameWindow : MonoBehaviour
     public void InitGame(Game game)
     {
         playersList = new List<PlayerObject>(game.Players.Count);
+        foreach(Transform child in playerPanel) Destroy(child.gameObject);
         foreach(Player player in game.Players)
         {
             GameObject newPlayerObject = GameObject.Instantiate(playerPrefab, playerPanel);

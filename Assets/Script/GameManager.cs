@@ -30,9 +30,9 @@ public class GameManager
     private Player shootedPlayer;
     private Player firstKilled;
     private List<Player> bestTurn;
-    //private int firstSpeakerIndex;
-
     private GameState gameState;
+    private bool isKicked;
+
     public GameHandler onGameStarted;
     public ErrorHandler onGameManagerGotError;
     public GameStateHandler onGameStateChanged;
@@ -92,6 +92,7 @@ public class GameManager
 
     internal void KickPlayer(Player player)
     {
+        isKicked = true;
         player.Die();
         CheckWinner();
     }
@@ -347,7 +348,7 @@ public class GameManager
                 break;
             case GameState.VOTE_OFFIACIAL:
                 votePlayerIndex = 0;               
-                if (votedPlayers.Count == 0)
+                if (votedPlayers.Count == 0 || isKicked)
                 {
                     StartNight();
                 }
@@ -412,7 +413,7 @@ public class GameManager
                 break;
             case GameState.FIRST_NIGHT_MAFIA:
                 SetState(GameState.FIRST_NIGHT_SHERIF);
-                StartTimer(30);                
+                StartTimer(20);                
                 break;
             default:
                 break;
@@ -428,6 +429,7 @@ public class GameManager
             player.UnPut();
             player.RemoveBestTurn();
         }
+        isKicked = false;
         votedPlayers.Clear();
         currentTurn++;
         onCameNewDay?.Invoke(currentTurn);
@@ -553,6 +555,7 @@ public class GameManager
         if(currentGame.CheckPlayer())
         //if(true)
         {
+            isKicked = false;
             currentTurn = 0;
             isPutted = false;
             votedPlayers = new List<Player>();

@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource audioSource;
     [SerializeField] private AudioClip tenSeconds;
+    [SerializeField] private AudioClip finalTimer;
 
     private void Awake()
     {
@@ -18,7 +19,11 @@ public class AudioManager : MonoBehaviour
         switch (sound) {
             case AudioSounds.TEN_SECONDS:
                 //audioSource.resource = tenSeconds;
-                audioSource.PlayOneShot(tenSeconds); 
+                audioSource.PlayOneShot(tenSeconds);
+                break;
+            case AudioSounds.FINAL_TIMER:
+                //audioSource.resource = tenSeconds;
+                audioSource.PlayOneShot(finalTimer);
                 break;
             default:
                 Debug.Log($"«вук {sound} не найден.") ;

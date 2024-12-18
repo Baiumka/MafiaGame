@@ -186,7 +186,11 @@ public class Controller : MonoBehaviour
 
     public void PutToVote(Player voted)
     {
-        gameManager.PutToVote(voted);
+        InterfaceManager.dialog.ShowDialog(
+            Translator.Message(Messages.PUT_VOTE_CONFIRM) + "\n" + voted.Number + ". " + voted.People.name,
+            () => gameManager.PutToVote(voted),
+            null
+            );        
     }
 
     private void Update()

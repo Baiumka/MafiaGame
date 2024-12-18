@@ -60,6 +60,8 @@ public class LogItem : MonoBehaviour
         {
             targetNumberText.text = string.Empty;
             targetNickname.text = string.Empty;
+            Destroy(targetObject.GetComponent<Image>());
+            Destroy(targetNumberPlate.GetComponent<Image>());
         }
         else
         {
@@ -85,6 +87,8 @@ public class LogItem : MonoBehaviour
         {
             playerNumberText.text = string.Empty;
             playerNickname.text = string.Empty;
+            Destroy(playerObject.GetComponent<Image>());
+            Destroy(playerNumberPlate.GetComponent<Image>());
         }
         else
         {

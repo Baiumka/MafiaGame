@@ -62,6 +62,7 @@ public class TickPanel : MonoBehaviour
         {                      
             if (timerTicked == 0) OnTimerEnd();
             if (timerTicked == 10) AudioManager.instance.Play(AudioSounds.TEN_SECONDS);
+            if (timerTicked == 2) AudioManager.instance.Play(AudioSounds.FINAL_TIMER);
             if (timerTicked < 0) timerTicked = 0;
             currentSeconds = timerTicked;
             seocndsText.color = Color.white;

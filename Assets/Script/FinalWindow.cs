@@ -122,15 +122,18 @@ public class FinalWindow : MonoBehaviour
         int i = 1;
         foreach(ResultHistoryEvent e in history)
         {
+            if (e.event_type == EventType.WARN) continue;
+            if (e.event_type == EventType.BEST_TURN)
+            {
+                bestTurn.Add(e);
+                continue;
+            }
             GameObject eventObject = GameObject.Instantiate(logItemPrefab, logList);
             LogItem logItem = eventObject.GetComponent<LogItem>();
             logItem.Init(e);
             logItem.SetColor((i % 2 == 1 ? color1 : color2 ));
             i++;
-            if(e.event_type == EventType.BEST_TURN)
-            {
-                bestTurn.Add(e);
-            }
+            
         }
       
         foreach (ResultHistoryEvent e in bestTurn)

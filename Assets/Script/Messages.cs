@@ -51,4 +51,5 @@ public enum Messages
     NO_LOGIN,
     TOO_SHORT_NAME,
     NO_END,
+    PUT_VOTE_CONFIRM,
 }
