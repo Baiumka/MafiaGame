@@ -24,7 +24,7 @@ public class Controller : MonoBehaviour
     public LeftSecondsHandler onTimerTicked;
     public DayHandler onCameNewDay;
     public PlayerHandler onNewSpeaker;
-    public PlayerHandler onPlayerVotedTurn;
+    public PlayerVoteHandler onPlayerVotedTurn;
     public VoteOfficialHandler onVoteOfficial;
     public IntHandler onVotesChanged;
     public VoteOfficialHandler onDopSpeakOfficial;
@@ -274,6 +274,11 @@ public class Controller : MonoBehaviour
         }
     }
 
+    public void SetVoices(int  voices)
+    {
+        gameManager.SetVoices(voices);
+    }
+
     public void SelectPeopleForSlot(Player player)
     {
         if (gameManager.GameState == GameState.GIVE_ROLE)
@@ -281,7 +286,7 @@ public class Controller : MonoBehaviour
             onWantedPlayerList?.Invoke();
             playerSlotSelecting = player;
         }
-        else if (gameManager.GameState == GameState.VOTE || gameManager.GameState == GameState.DOP_VOTE || gameManager.GameState == GameState.VOTE_FOR_UP)
+        /*else if (gameManager.GameState == GameState.VOTE || gameManager.GameState == GameState.DOP_VOTE || gameManager.GameState == GameState.VOTE_FOR_UP)
         {
             if (player.Voted == null)
             {
@@ -291,7 +296,7 @@ public class Controller : MonoBehaviour
             {
                 gameManager.TryUnVote(player);
             }
-        }
+        }*/
         else if (gameManager.GameState == GameState.SHOOTING)
         {
             InterfaceManager.dialog.ShowDialog(
@@ -370,9 +375,9 @@ public class Controller : MonoBehaviour
     {    
         onGameStateChanged?.Invoke(gameState);
     }
-    private void VotedTurn(Player player)
+    private void VotedTurn(Player player, int alivePlayers)
     {
-        onPlayerVotedTurn?.Invoke(player);
+        onPlayerVotedTurn?.Invoke(player, alivePlayers);
     }
 
     private void TickTimer(int now, int final)

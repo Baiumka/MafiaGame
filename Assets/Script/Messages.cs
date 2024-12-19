@@ -52,4 +52,6 @@ public enum Messages
     TOO_SHORT_NAME,
     NO_END,
     PUT_VOTE_CONFIRM,
+    ON_VOTE,
+    CROSSFIRE_VOTE,
 }

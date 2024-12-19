@@ -82,6 +82,8 @@ public class Translator
         firstDict.Add(Messages.NO_WIN, "Ничья =(");
         firstDict.Add(Messages.NO_END, "Игра не окончена");
         firstDict.Add(Messages.PUT_VOTE_CONFIRM, "Вы уверены что говорящий игрок выставил игрока?");
+        firstDict.Add(Messages.ON_VOTE, "На голосовании:");
+        firstDict.Add(Messages.CROSSFIRE_VOTE, "Кто за то что бы выгнать всех?");
     }
 
     public static string Message(Messages message)

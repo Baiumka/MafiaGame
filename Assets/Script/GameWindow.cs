@@ -14,7 +14,11 @@ public class GameWindow : MonoBehaviour
     [SerializeField] Button startGameButton;
     [SerializeField] TickPanel tickPanel;
     [SerializeField] TMP_Text dayText;
-    
+    [SerializeField] GameObject votePanel;
+    [SerializeField] Transform voteTransform;
+    [SerializeField] GameObject voiceButtonPrefab;
+    [SerializeField] ShortNumberPrefab numberPlate;
+    [SerializeField] TMP_Text voteText;
 
     private List<PlayerObject> playersList;
     private GameState visibleGameState = GameState.GIVE_ROLE;
@@ -24,6 +28,7 @@ public class GameWindow : MonoBehaviour
         roleContextMenu.SetActive(false);
         startGameButton.gameObject.SetActive(true);
         tickPanel.gameObject.SetActive(false);
+        votePanel.gameObject.SetActive(false);
     }
 
     public void Init()
@@ -40,7 +45,7 @@ public class GameWindow : MonoBehaviour
         Controller.singlton.onDopSpeakOfficial += DopSpeakOfficial;
         Controller.singlton.onDopSpeakStarted += DopSpeakStart;
         Controller.singlton.onDopVoteOfficial += DopVoteOfficial;
-       // Controller.singlton.onNightStarted += StartNight;
+        Controller.singlton.onNightStarted += StartNight;
         Controller.singlton.onLastWordStarted += LastWord;
         
 
@@ -48,11 +53,17 @@ public class GameWindow : MonoBehaviour
         tickPanel.Init();
     }
 
-   
+    private void StartNight()
+    {
+        tickPanel.gameObject.SetActive(true);
+        votePanel.gameObject.SetActive(false);
+    }
 
     private void LastWord(Player player)
     {
         tickPanel.LastWord(player);
+        tickPanel.gameObject.SetActive(true);
+        votePanel.gameObject.SetActive(false);
     }
 
   
@@ -80,10 +91,20 @@ public class GameWindow : MonoBehaviour
         tickPanel.SetVoteCount(i);
     }
 
-    private void VoteTurn(Player player)
+    private void VoteTurn(Player player, int voices)
     {
-        ChangeState(GameState.VOTE);
-        tickPanel.VotePlayer(player);
+        ChangeState(GameState.VOTE);        
+        if(player != null) numberPlate.SetNumber(player.Number, Role.NONE);
+        foreach(Transform child in voteTransform) Destroy(child.gameObject);
+        for (int i = 0; i <= voices; i++)
+        {
+            GameObject obj = GameObject.Instantiate(voiceButtonPrefab, voteTransform);
+            VoiceButtonPrefab vbp = obj.GetComponent<VoiceButtonPrefab>();
+            vbp.Init(i);
+        }
+        tickPanel.gameObject.SetActive(false);
+        votePanel.gameObject.SetActive(true);
+        //tickPanel.VotePlayer(player);
     }
 
     private void VoteOfficial(List<Player> votedPlayers)
@@ -136,20 +157,29 @@ public class GameWindow : MonoBehaviour
                 tickPanel.SetState(visibleGameState);
                 break;
             case GameState.VOTE_FOR_UP:
-                tickPanel.VoteForUp();
+                numberPlate.gameObject.SetActive(false);
+                VoteTurn(null, 10);
+                voteText.text = Translator.Message(Messages.CROSSFIRE_VOTE);                
+                //tickPanel.VoteForUp();
                 break;
             case GameState.DOP_SPEAK:
+                tickPanel.SetState(GameState.DOP_SPEAK);
                 dayText.text = Translator.Message(Messages.CROSSFIRE);
+                tickPanel.gameObject.SetActive(true);
+                votePanel.gameObject.SetActive(false);
                 break;
             case GameState.VOTE:
-                dayText.text = Translator.Message(Messages.COURT);
-                foreach (PlayerObject po in playersList)
-                {
-                    po.HideVoteButton();
-                }
+                dayText.text = Translator.Message(Messages.COURT);               
+                break;
+            case GameState.DOP_VOTE_OFFICIAL:                                
+                voteText.text = Translator.Message(Messages.ON_VOTE);              
+                tickPanel.gameObject.SetActive(true);
+                votePanel.gameObject.SetActive(false);
                 break;
             case GameState.VOTE_OFFIACIAL:
                 dayText.text = Translator.Message(Messages.COURT);
+                numberPlate.gameObject.SetActive(true);
+                voteText.text = Translator.Message(Messages.ON_VOTE);
                 foreach (PlayerObject po in playersList)
                 {
                     po.HideVoteButton();
@@ -188,6 +218,8 @@ public class GameWindow : MonoBehaviour
                 break;
         }
     }
+
+
 
     private void OnStartButtonClick()
     {
