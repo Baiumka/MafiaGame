@@ -242,6 +242,12 @@ public class GameManager
         }
     }
 
+    private void StartMorning()
+    {
+        SetState(GameState.MORNING);
+        timer.Stop();
+    }
+
     public void NextState()
     {
         switch (gameState)
@@ -251,7 +257,7 @@ public class GameManager
                 {
                     currentGame.Log(firstKilled, p, EventType.BEST_TURN);
                 }
-                SetState(GameState.MORNING);
+                StartMorning();
                 break;
             case GameState.SHERIF:
                 if ((currentTurn == 1 && currentGame.AlivePlayers.Count >= 9) && shootedPlayer != null)
@@ -263,7 +269,7 @@ public class GameManager
                 }
                 else
                 {
-                    SetState(GameState.MORNING);                    
+                    StartMorning();
                 }
                 
                 break;
@@ -295,8 +301,8 @@ public class GameManager
                 }
                 break;
             case GameState.VOTE_LAST_WORD:
-                CheckWinner();
                 StartNight();
+                CheckWinner();                
                 break;                        
             case GameState.DOP_VOTE_OFFICIAL:
                 votePlayerIndex=0;
@@ -348,8 +354,9 @@ public class GameManager
                 }    
                 break;
             case GameState.SHOT_LAST_WORD:
-                CheckWinner();
                 StandartMorning();
+                CheckWinner();
+                
                 break;
             case GameState.DAY:
                 isPutted = false;
@@ -375,8 +382,8 @@ public class GameManager
                     onNewSpeaker?.Invoke(speakPlayer);
                 }
                 break;
-            case GameState.MORNING:
-                if(shootedPlayer != null)
+            case GameState.MORNING:                
+                if (shootedPlayer != null)
                 {
                     GiveLastWord(shootedPlayer);
                     shootedPlayer = null;
@@ -386,8 +393,8 @@ public class GameManager
 
 
                 break;
-            case GameState.FIRST_NIGHT_SHERIF:                
-                SetState(GameState.MORNING);
+            case GameState.FIRST_NIGHT_SHERIF:
+                StartMorning();
                 break;
             case GameState.FIRST_NIGHT_MAFIA:
                 SetState(GameState.FIRST_NIGHT_SHERIF);
@@ -466,6 +473,7 @@ public class GameManager
 
     private void StartNight()
     {
+        timer.Stop();
         foreach (Player p in currentGame.Players)
         {
             p.UnVote();

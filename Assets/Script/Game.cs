@@ -10,6 +10,8 @@ public class Game
     public History history;
     public int Citizens { get => players.Count(player => (player.Role == Role.CITIZEN || player.Role == Role.SHERIFF) && !player.IsDead); }
     public int Mafia { get => players.Count(player => (player.Role == Role.MAFIA || player.Role == Role.BOSS) && !player.IsDead); }
+    public int BossCount { get => players.Count(player => ( player.Role == Role.BOSS) && !player.IsDead); }
+    public int SherifCount { get => players.Count(player => ( player.Role == Role.SHERIFF) && !player.IsDead); }
     public Player Sherif { get => players.Where(player => (player.Role == Role.SHERIFF)).First(); }
     public Player Boss { get => players.Where(player => (player.Role == Role.BOSS)).First(); }
     public List<Player> PuttedPlayers { get => players.Where(player => player.IsPutted && !player.IsDead).ToList(); }
@@ -52,6 +54,10 @@ public class Game
             if (p.People == null) return false;
         }
         if (Mafia >= Citizens) return false;
+        if (Mafia != 3) return false;
+        if (Mafia != 3) return false;
+        if (BossCount != 1) return false;
+        if (SherifCount != 1) return false;
         return true;
     }
 
