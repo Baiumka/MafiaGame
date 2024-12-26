@@ -10,4 +10,6 @@ public class ResultHistoryEvent : MonoBehaviour
     public int target_number; // Номер игрока, ставшего целью события
     public string target_name; // Имя цели
     public Role target_role; // Роль цели
+    public string dop;
+    public int dop_n;
 }

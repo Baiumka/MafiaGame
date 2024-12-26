@@ -18,6 +18,7 @@ public class FinalWindow : MonoBehaviour
     [SerializeField] private GameObject logItemPrefab;
     [SerializeField] private Color color1;
     [SerializeField] private Color color2;
+    [SerializeField] private Color colorDay;
     [SerializeField] private ShortNumberPrefab firstKillNumber;
     [SerializeField] private TMP_Text firstKillNameText;
     [SerializeField] private Transform bestTurnTranform;
@@ -131,7 +132,8 @@ public class FinalWindow : MonoBehaviour
             GameObject eventObject = GameObject.Instantiate(logItemPrefab, logList);
             LogItem logItem = eventObject.GetComponent<LogItem>();
             logItem.Init(e);
-            logItem.SetColor((i % 2 == 1 ? color1 : color2 ));
+            if(e.event_type == EventType.NEW_DAY) logItem.SetColor(colorDay);
+            else logItem.SetColor((i % 2 == 1 ? color1 : color2 ));
             i++;
             
         }

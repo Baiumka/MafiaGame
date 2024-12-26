@@ -5773,8 +5773,9 @@ MonoBehaviour:
   bossList: {fileID: 1504997669}
   logList: {fileID: 863875067}
   logItemPrefab: {fileID: 5036565191788091980, guid: f1ecff8d6a4575e469fc4b043e24565d, type: 3}
-  color1: {r: 0.5603591, g: 0.7647059, b: 0.1490196, a: 1}
-  color2: {r: 0.86415094, g: 0.5662967, b: 0.1614168, a: 1}
+  color1: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  color2: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
+  colorDay: {r: 1, g: 0, b: 0, a: 0.78431374}
   firstKillNumber: {fileID: 213389520}
   firstKillNameText: {fileID: 759948584}
   bestTurnTranform: {fileID: 922539845}

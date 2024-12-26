@@ -88,12 +88,13 @@ public class GameManager
         if (player.Warn >= 4)
         {
             currentGame.Log(null, player, EventType.WARN_EXIT);
-            KickPlayer(player);        
+            KickPlayer(player, true);        
         }
     }
 
-    internal void KickPlayer(Player player)
+    internal void KickPlayer(Player player, bool isWarn = false)
     {
+        if(!isWarn) currentGame.Log(null, player, EventType.KICKED);
         isKicked = true;
         player.Die();
         CheckWinner();
@@ -168,7 +169,7 @@ public class GameManager
         }
         if (maxsPlayers.Count == 1)
         {
-            GiveLastWord(maxsPlayers[0]);
+            GiveLastWord(maxsPlayers[0], max);
             return null;
         }
         else
@@ -227,12 +228,12 @@ public class GameManager
                 }
                 break;
             case GameState.VOTE_FOR_UP:
-                float result = voteResult[votedPlayers[votePlayerIndex]];
+                int result = voteResult[votedPlayers[votePlayerIndex]];
                 float alivePlayersCount = currentGame.AlivePlayers.Count / 2;
                 if (result > alivePlayersCount)
                 {
                     votePlayerIndex = 0;
-                    GiveLastWord(votedPlayers[votePlayerIndex]);
+                    GiveLastWord(votedPlayers[votePlayerIndex], result);
                 }
                 else
                 {
@@ -292,7 +293,7 @@ public class GameManager
                 votePlayerIndex++;
                 if(votePlayerIndex < votedPlayers.Count)
                 {
-                    GiveLastWord(votedPlayers[votePlayerIndex]);
+                    GiveLastWord(votedPlayers[votePlayerIndex], voteResult[votedPlayers[votePlayerIndex]]);
                 }
                 else
                 {
@@ -408,7 +409,7 @@ public class GameManager
 
     private void StandartMorning()
     {
-        currentGame.Log(null,null,EventType.NEW_DAY);
+        
         foreach (Player player in currentGame.Players)
         {
             player.UnPut();
@@ -417,6 +418,7 @@ public class GameManager
         isKicked = false;
         votedPlayers.Clear();
         currentTurn++;
+        currentGame.Log(null, null, EventType.NEW_DAY, currentTurn);
         onCameNewDay?.Invoke(currentTurn);
         speakPlayer = currentGame.GetNextPlayer(firstSpeaker);
         firstSpeaker = speakPlayer;
@@ -481,11 +483,11 @@ public class GameManager
         SetState(GameState.NIGHT);
     }
 
-    private void GiveLastWord(Player player)
+    private void GiveLastWord(Player player, int voices = 0)
     {
-        if (gameState == GameState.VOTE_FOR_UP)
+        if (gameState == GameState.VOTE_FOR_UP || gameState == GameState.DOP_VOTE_LAST_WORD)
         {
-            currentGame.Log(null, player, EventType.VOTE_TO_EXIT);
+            currentGame.Log(null, player, EventType.VOTE_TO_EXIT_BOTH, voices);
             SetState(GameState.DOP_VOTE_LAST_WORD);
         }
         else if(gameState == GameState.MORNING)
@@ -494,7 +496,7 @@ public class GameManager
         }
         else
         {
-            currentGame.Log(null, player, EventType.VOTE_TO_EXIT);
+            currentGame.Log(null, player, EventType.VOTE_TO_EXIT, voices);
             SetState(GameState.VOTE_LAST_WORD);
         }
         player.Die();

@@ -13,12 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Начало транзакции
 		$pdo->beginTransaction();
 		
-		$queryGame = "INSERT INTO mafia.history (id_game, id_player, id_target, event_type, dd) VALUES ( :id_game, :id_player, :id_target, :event_type, NOW()) RETURNING id;";
+		$queryGame = "INSERT INTO mafia.history (id_game, id_player, id_target, event_type, dd, dop, dop_n) VALUES ( :id_game, :id_player, :id_target, :event_type, NOW(), :dop, :dop_n) RETURNING id;";
 		$stmtGame = $pdo->prepare($queryGame);
 		$stmtGame->bindParam(':id_game', $data['id_game'], PDO::PARAM_INT);
 		$stmtGame->bindParam(':id_player', $data['history']['player']['Number'], PDO::PARAM_INT);
 		$stmtGame->bindParam(':id_target', $data['history']['target']['Number'], PDO::PARAM_INT);
 		$stmtGame->bindParam(':event_type', $data['history']['type'], PDO::PARAM_STR);
+		$stmtGame->bindParam(':dop', $data['history']['dop'], PDO::PARAM_STR);
+		$stmtGame->bindParam(':dop_n', $data['history']['dop_n'], PDO::PARAM_STR);
 		$stmtGame->execute();
 		$historyID = $stmtGame->fetchColumn();
 

@@ -26,7 +26,7 @@ public class Game
         {
             Player newPlayer = new Player(i);
             players.Add(newPlayer);
-           /* if (i == 1) newPlayer.SetRole(Role.CITIZEN);
+            if (i == 1) newPlayer.SetRole(Role.CITIZEN);
             if (i == 2) newPlayer.SetRole(Role.CITIZEN);
             if (i == 3) newPlayer.SetRole(Role.CITIZEN);
             if (i == 4) newPlayer.SetRole(Role.CITIZEN);
@@ -35,14 +35,30 @@ public class Game
             if (i == 7) newPlayer.SetRole(Role.SHERIFF);
             if (i == 8) newPlayer.SetRole(Role.MAFIA);
             if (i == 9) newPlayer.SetRole(Role.MAFIA);
-            if (i == 10) newPlayer.SetRole(Role.BOSS);*/
+            if (i == 10) newPlayer.SetRole(Role.BOSS);
         }
     }
 
     public void Log(Player player, Player target, EventType eventType)
     {
-        history.Add(player,target,eventType);
+        history.Add(player, target, eventType);
     }
+
+    public void Log(Player player, Player target, EventType eventType, string dop, int dop_n)
+    {
+        history.Add(player, target, eventType, dop, dop_n);
+    }
+
+    public void Log(Player player, Player target, EventType eventType, int dop_n)
+    {
+        history.Add(player, target, eventType, dop_n);
+    }
+
+    public void Log(Player player, Player target, EventType eventType, string dop)
+    {
+        history.Add(player, target, eventType, dop);
+    }
+
 
     public List<Player> Players { get => players; }
     

@@ -12,5 +12,6 @@ public enum EventType
     KICKED,//9
     WARN,//10
     WARN_EXIT,//11
-    NEW_DAY//12
+    NEW_DAY,//12
+    VOTE_TO_EXIT_BOTH
 }

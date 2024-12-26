@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+
 
 public class Translator
 {
@@ -20,6 +18,7 @@ public class Translator
         actionsDict = new Dictionary<EventType, string>();
         actionsDict.Add(EventType.KILL, "убит ночью");
         actionsDict.Add(EventType.VOTE_TO_EXIT, "изгнан городом");
+        actionsDict.Add(EventType.VOTE_TO_EXIT_BOTH, "поднят на распиле");
         actionsDict.Add(EventType.SELF_VOTE, "проголосовал в себя");
         actionsDict.Add(EventType.SELF_KILL, "мафия убила своего");
         actionsDict.Add(EventType.PUT, "выставил");
