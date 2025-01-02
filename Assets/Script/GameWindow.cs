@@ -155,6 +155,7 @@ public class GameWindow : MonoBehaviour
             case GameState.NIGHT:                
                 dayText.text = Translator.Message(Messages.NIGHT);
                 tickPanel.SetState(visibleGameState);
+                StartNight();
                 break;
             case GameState.VOTE_FOR_UP:
                 numberPlate.gameObject.SetActive(false);

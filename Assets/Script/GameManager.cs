@@ -2,6 +2,7 @@ using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Timers;
+using UnityEngine;
 using UnityEngine.UI;
 
 public delegate void GameHandler(Game newGame); 
@@ -186,6 +187,7 @@ public class GameManager
 
     internal void SetVoices(int voices)
     {
+        Debug.Log(voices + " " + gameState);
         voteResult[votedPlayers[votePlayerIndex]]=voices;
         glovalVoteCount += voices;
         switch (gameState)
